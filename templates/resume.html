@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Резюме (Стрелков){% endblock title %}
+{% block header_title %}Резюме{% endblock header_title %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/resume.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+  <div class="content__resume">
+    <h2>Стрелков Николай Александрович</h2>
+    <h3>Образование:</h3>
+    <ul>
+      <li>МБОУ "Выскоключевая СОШ".</li>
+      <li>В настоящее время учусь в колледже.</li>
+    </ul><hr>
+
+    <h3>Опыт:</h3>
+    <ul>
+      <li>Помогал с работой родителям.</li><li>Прочая хрень.</li>
+    </ul><hr>
+
+    <h3>Навыки:</h3>
+    <p>
+      Уверенный пользователь ПК (в том числе - офисные программы, основы Pascal,
+      основы CSS/HTML, основы Photoshop); опыт разрешения конфликтных ситуации.
+    </p>
+
+    <h3>Личные качества:</h3>
+    <p>
+      Добропорядочность, усердие в работе и учёбе, пунктуальность, собранность.
+    </p>
+
+  </div>
+
+  <img class="content__paint" src="{% static 'images/resume/landscape.png' %}">
+
+{% endblock content %}
+
+
+{% block script_builder %}
+    <script src="{% static 'scripts/resume_page_builder.js' %}"></script>
+{% endblock script_builder %}

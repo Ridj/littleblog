@@ -1,0 +1,102 @@
+/* DOCUMENT STYLES */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+}
+
+body {
+  background: radial-gradient(circle closest-corner at 30vw 20vh,
+                              #FAECD5, lightcyan) fixed;
+  font-family: monospace;
+
+  overflow: hidden;
+  -ms-scrollbar-face-color: black;
+  -ms-scrollbar-track-color: gray;
+  -ms-scrollbar-arrow-color: black;
+}
+
+
+/* CONTENT STYLES */
+/* error message */
+.error__message {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 0, 0, 0.15);
+}
+
+.error__message span {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  font-family: fantasy;
+  letter-spacing: .1vw;
+  font-size: calc(1.5vw + 10px);
+  color: black;
+}
+
+/* error link */
+.error_link {
+  position: absolute;
+  bottom: 4vw;
+  left: 4vw;
+  padding: 2vw;
+  border: 2px solid rgba(0, 0, 0, .7);
+  border-radius: 10px;
+  background: linear-gradient(to left bottom, rgba(0, 0, 0, 0.9),
+              rgba(64, 0, 0, 0.3));
+  text-shadow: -1px -1px 2px lavender, 1px 1px 2px lavender;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: calc(1.5vw + 10px);
+  color: rgba(0, 0, 0, 0.9);
+
+  -webkit-transition: box-shadow .33s cubic-bezier(.2, 0, .7, 1);
+  -moz-transition: box-shadow .33s cubic-bezier(.2, 0, .7, 1);
+  -o-transition: box-shadow .33s cubic-bezier(.2, 0, .7, 1);
+  transition: box-shadow .33s cubic-bezier(.2, 0, .7, 1);
+
+  -webkit-animation: scale3 1s linear infinite;
+  -moz-animation: scale3 1s linear infinite;
+  -o-animation: scale3 1s linear infinite;
+  animation: scale3 1s linear infinite;
+}
+.error_link:hover {
+  box-shadow: 0 0 1px 5px rgba(0, 0, 0, 0.05),
+              0 0 1px 10px rgba(0, 0, 0, 0.03),
+              0 0 1px 15px rgba(0, 0, 0, 0.025),
+              0 0 1px 20px rgba(0, 0, 0, 0.02),
+              0 0 1px 25px rgba(0, 0, 0, 0.01);
+  color: rgba(0, 0, 0, .8);
+  border-color: rgba(0, 0, 0, .4);
+}
+
+
+/* ACTIVE STYLES */
+.button_scale {
+  -webkit-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+}
+
+
+/* ANIMATION STYLES */
+@keyframes scale3 {
+
+	50% {
+    -webkit-transform: scale(1.03);
+    -ms-transform: scale(1.03);
+    transform: scale(1.03);
+  }
+	100% {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+
+}

@@ -1,0 +1,97 @@
+/* HEADER STYLES */
+.header {
+  border-bottom: .25vw solid rgba(0, 0, 0, .6);
+}
+
+
+/* CONTENT STYLES*/
+/* warning */
+p {
+  margin: 0 15vw;
+  padding: 3.5vh 2.5vw;
+  border-radius: 5px;
+  border: .25vw solid rgba(0, 0, 0, .6);
+  border-top: none;
+  background: rgba(255, 255, 255, .22);
+  text-align: center;
+  line-height: 3vw;
+  font-weight: bold;
+  font-size: 2vw;
+  color: rgba(47, 31, 36, 0.77);
+  text-shadow: lavender 0 0 0.1vh,
+               darkgrey 0 0 0.1vh,
+               darkgrey 0 0 0.1vh,
+               lavender 0.07vh 0.07vh 0.07vh,
+               darkgrey 0.3vh 0.2vh 0.2vh;;
+}
+
+p b {
+  font-family: cursive;
+  font-style: normal;
+  font-size: 2.25vw;
+  color: rgba(8, 87, 14, 0.88);
+  text-shadow: lavender 0 0 0.1vh,
+               rgba(0, 128, 0, 0.36) 0 0 0.1vh,
+               rgba(0, 128, 0, 0.49) 0 0 0.1vh,
+               lavender 0.07vh 0.07vh 0.07vh,
+               rgba(0, 128, 0, 0.4) 0.3vh 0.2vh 0.2vh;
+}
+
+p span {
+  display: inline-block;
+  font-size: 2.5vw;
+  color: rgba(166, 33, 35, 0.88);
+  text-shadow: lavender 0 0 0.1vh,
+               rgba(139, 0, 0, 0.41) 0 0 0.1vh,
+               rgba(139, 0, 0, 0.56) 0 0 0.1vh,
+               lavender 0.07vh 0.07vh 0.07vh,
+               rgba(139, 0, 0, 0.47) 0.3vh 0.2vh 0.2vh;
+
+  -webkit-animation: scaleon2 2s linear infinite;
+  -moz-animation: scaleon2 2s linear infinite;
+  -o-animation: scaleon2 2s linear infinite;
+  animation: scaleon2 2s linear infinite;
+}
+
+
+/* restore button */
+input[type="submit"] {
+  left: 36vw;
+  padding: 2vh 3vw;
+  border-bottom: 2px solid black;
+  border-radius: 5px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 7%,
+                              rgba(197, 250, 185, 0.5));
+  text-shadow: 1px 2px 2px lightslategray;
+  letter-spacing: .4vw;
+  font-size: 3vw;
+  color: rgba(0, 0, 0, .7);
+
+  -webkit-animation: none;
+  -moz-animation: none;
+  -o-animation: none;
+  animation: none;
+}
+
+.helper:hover{
+  box-shadow: 0 0 1px 5px rgba(14, 255, 35, 0.05),
+              0 0 1px 10px rgba(14, 255, 35, 0.05),
+              0 0 1px 15px rgba(14, 255, 35, 0.05),
+              0 0 1px 20px rgba(14, 255, 35, 0.05),
+              0 0 1px 25px rgba(14, 255, 35, 0.05);
+  color: rgba(0, 0, 0, .5);
+
+  -webkit-animation: scaleon 1s linear infinite;
+  -moz-animation: scaleon 1s linear infinite;
+  -o-animation: scaleon 1s linear infinite;
+  animation: scaleon 1s linear infinite;
+}
+
+
+/* ANIMATION STYLES*/
+@keyframes scaleon2 {
+
+	50% { transform: scale(1.05); }
+	100% { transform: scale(1);	}
+
+}

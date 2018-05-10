@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Блог удалён{% endblock title %}
+{% block header_title %}Удаление завершено{% endblock header_title %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/deleted.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+  <p>Блог <b>"{{ deleted_name }}"</b> успешно удалён.
+    <br>У вас есть последний шанс его восстановить,
+    <br>после сделать это будет
+    <span>невозможно!</span>
+  </p>
+
+  <input class="helper" type="submit" value="Восстановить"
+         onclick="restoreBlog('{{ deleted_id }}')">
+{% endblock content %}
+
+
+{% block script_builder %}
+  <script src="{% static 'scripts/reg_page_builder.js'%}"></script>
+{% endblock script_builder %}

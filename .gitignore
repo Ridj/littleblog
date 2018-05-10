@@ -1,0 +1,7 @@
+.idea/
+__pycache__/
+venv/
+nikolay/settings.py
+littleblog/__pycache__/
+littleblog/migrations/
+nikolay/__pycache__/

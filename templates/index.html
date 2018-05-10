@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Awesome{% endblock title %}
+{% block header_title %}AWESOME{% endblock header_title %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+
+  <div class="main__images_block">
+
+    <div class="img__block">
+      <img class="main__image back_img" id="image_000"
+           src="{% static 'images/main/image000.png' %}"
+           alt="AWESOME">
+
+      <img class="main__image back_img" id="image_110"
+           src="{% static 'images/main/image110.jpg' %}"
+           alt="AWESOME">
+      <img class="main__image" id="image_111"
+           src="{% static 'images/main/image111.png' %}"
+           alt="AWESOME">
+      <img class="main__image" id="image_112"
+           src="{% static 'images/main/image112.png' %}"
+           alt="AWESOME">
+      <img class="main__image" id="image_113"
+           src="{% static 'images/main/image113.png' %}"
+           alt="AWESOME">
+
+      <img class="main__image back_img" id="image_120"
+           src="{% static 'images/main/image120.jpg' %}"
+           alt="AWESOME">
+      <img class="main__image back_img" id="image_130"
+           src="{% static 'images/main/image130.png' %}"
+           alt="AWESOME">
+    </div>
+
+    <div class="img__block">
+      <img class="main__image back_img" id="image_000"
+           src="{% static 'images/main/image000.png' %}"
+           alt="AWESOME">
+
+      <img class="main__image back_img" id="image_330"
+           src="{% static 'images/main/image330.jpg' %}"
+           alt="AWESOME">
+      <img class="main__image" id="image_331"
+           src="{% static 'images/contacts/prs_pyt.png' %}"
+           alt="AWESOME">
+      <img class="main__image" id="image_332"
+           src="{% static 'images/main/image332.jpg' %}"
+           alt="AWESOME">
+      <img class="main__image" id="image_333"
+           src="{% static 'images/main/image333.jpg' %}"
+           alt="AWESOME">
+
+      <img class="main__image back_img" id="image_310"
+           src="{% static 'images/main/image310.jpg' %}"
+           alt="AWESOME">
+      <img class="main__image back_img" id="image_320"
+           src="{% static 'images/main/image320.png' %}"
+           alt="AWESOME">
+    </div>
+
+    <div class="img__block">
+      <img class="main__image back_img" id="image_000"
+           src="{% static 'images/main/image000.png' %}"
+           alt="AWESOME">
+
+      <img class="main__image back_img" id="image_210"
+           src="{% static 'images/main/image210.jpg' %}"
+           alt="AWESOME">
+      <img class="main__image" id="image_211"
+           src="{% static 'images/main/image211.png' %}"
+           alt="AWESOME">
+      <img class="main__image" id="image_212"
+           src="{% static 'images/main/image212.png' %}"
+           alt="AWESOME">
+      <img class="main__image back_img" id="image_213"
+           src="{% static 'images/main/image213.png' %}"
+           alt="AWESOME">
+
+      <img class="main__image back_img" id="image_220"
+           src="{% static 'images/main/image220.jpg' %}"
+           alt="AWESOME">
+      <img class="main__image back_img" id="image_230"
+           src="{% static 'images/main/image230.png' %}"
+           alt="AWESOME">
+    </div>
+
+
+    <fieldset class="blog__article hide_blog" id="article{{ preblog.id }}">
+      <legend>{{ preblog.name }}</legend>
+
+      {% if preblog.modified == null %}
+        <span class="blog__data data_created">Создан:
+          {{ preblog.created|date:"H:i, M d, Y" }}</span>
+
+      {% else %}
+        <span class="blog__data data_created">Создан :
+          {{ preblog.created|date:"H:i, M d, Y" }}</span>
+        <span class="blog__data data__modified">Изменён:
+          {{ preblog.modified|date:"H:i, M d, Y" }}</span>
+      {% endif %}
+
+      <span class="blog__link">
+        <a href="/blog/post/{{ preblog.id }}/">Читать полностью</a>
+      </span>
+
+      <div class="blog__content" id="content{{ preblog.id }}"></div>
+
+      <span class="blog__author">Автор: <b>{{ preblog.author }}</b></span>
+    </fieldset>
+
+  </div>
+
+
+  <fieldset class="blog__article" id="article{{ blog.id }}">
+    <legend>{{ blog.name }}</legend>
+
+    {% if blog.modified == null %}
+      <span class="blog__data data_created">Создан:
+        {{ blog.created|date:"H:i, M d, Y" }}</span>
+
+    {% else %}
+      <span class="blog__data data_created">Создан :
+        {{ blog.created|date:"H:i, M d, Y" }}</span>
+      <span class="blog__data data__modified">Изменён:
+        {{ blog.modified|date:"H:i, M d, Y" }}</span>
+    {% endif %}
+
+    <span class="blog__link">
+      <a href="/blog/post/{{ blog.id }}/">Читать полностью</a>
+    </span>
+
+    <div class="blog__content" id="content{{ blog.id }}"></div>
+
+    <span class="blog__author">Автор: <b>{{ blog.author }}</b></span>
+  </fieldset>
+
+{% endblock content %}
+
+
+{% block script_builder %}
+  <script>
+    // Filter blogs content from bad symbols
+    fillBlogContent('content{{ blog.id }}', '{{ blog.content }}');
+    fillBlogContent('content{{ preblog.id }}', '{{ preblog.content }}');
+  </script>
+
+  <script src="{% static 'scripts/main_page_builder.js' %}"></script>
+{% endblock script_builder %}

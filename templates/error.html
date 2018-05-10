@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Error ({{ type }})</title>
+  <link rel="shortcut icon" type="image/x-icon"
+        href="{% static 'images/favicon.ico' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/error.css' %}">
+</head>
+
+<body>
+  <a class="error_link" href="/">На главную</a>
+
+  <div class="error__message">
+    <span>
+    {% if type == 'blog' %}
+      😢 Блога с номером {{ id }} не существует 😢
+
+      {% elif type == 'comment' %}
+      😢 Нельзя так делать 😢
+
+      {% elif type == 'delete' %}
+        Недостаточно прав для удаления блога<br>
+        😢"{{ blog_name }}"😢
+
+      {% elif type == 'exist' %}
+      😢 Страницы не существует 😢
+
+      {% elif type == 'permission' %}
+      😢 У вас недостаточно прав для просмотра этой страницы 😢
+
+      {% elif type == 'restore' %}
+      😢 К сожалению, блог восстановить уже невозможно 😢
+
+      {% elif type == 'restore_own' %}
+        У вас недостаточно прав для восстановление блога<br>
+        😢"{{ blog_name }}"😢
+
+      {% else %}
+      😢 Что-то пошло не так... 😢
+    {% endif %}
+    </span>
+  </div>
+
+  <script src="{% static 'scripts/error_page_builder.js' %}"></script>
+</body>
+</html>

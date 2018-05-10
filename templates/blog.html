@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Блог{% endblock title %}
+{% block header_title %}
+  Блог{% if theme != 'all' %} <span><b>({{ theme }})</b></span> {% endif %}
+{% endblock header_title %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}">
+{% endblock style %}
+
+
+{% block addheader %}
+  <div class="create_helper" align="center">
+    <span class="create_blog"
+          onclick="{% if request.user.is_authenticated != False %}
+                      createNewBlog();
+                   {% else %}
+                      cancelLogIn();
+                   {% endif %}">Новый блог</span>
+  </div>
+
+  <div class="header__log_buttons closed_h">
+    <span class="header__register">
+      {% if request.user.is_authenticated != False %}
+        <span class="header__name">
+          <script>animateName('{{ user.get_username }}');</script>
+        </span>
+      {% else %}
+        <a class="header__button"
+           onclick="registerUser('{{ request.get_full_path }}')">Регистрация
+        </a>
+      {% endif %}
+    </span>
+
+    <span class="header__login">
+      <span class="header__switcher"></span>
+    </span>
+  </div>
+{% endblock addheader %}
+
+
+{% block content %}
+  <div class="blog__pages" align="center"></div>
+
+  <div class="select_theme"></div>
+
+  {% if amount > 0 %}
+    {% for blog in blogs %}
+      <fieldset class="blog__article" id="article{{ blog.id }}">
+        <legend>{{ blog.name }}</legend>
+        {% if blog.modified == null %}
+          <span class="blog__data data_created">Создан:
+            {{ blog.created|date:"H:i, M d, Y" }}</span>
+        {% else %}
+          <span class="blog__data data_created">Создан :
+            {{ blog.created|date:"H:i, M d, Y" }}</span>
+          <span class="blog__data data__modified">Изменён:
+            {{ blog.modified|date:"H:i, M d, Y" }}</span>
+        {% endif %}
+
+        <span class="blog__link">
+          <a href="/blog/post/{{ blog.id }}/">Читать полностью</a>
+        </span>
+
+        <span class="blog__theme">{{ blog.theme }}</span>
+        <div class="blog__content" id="content{{ blog.id }}"></div>
+        <span class="blog__author">Автор: <b>{{ blog.author }}</b></span>
+      </fieldset>
+
+      <script>
+        fillBlogContent('content{{ blog.id }}', '{{ blog.content }}');
+      </script>
+    {% endfor %}
+
+    <div class="blog__pages" align="center"></div>
+
+  {% else %}
+    <div class="blog__none">
+      <span>Здесь ещё нет ни одного блога 😢</span>
+    </div>
+
+    <style>
+      .content { min-height: 60vh; }
+      .footer { position: fixed; bottom: 0; width: 100%; }
+    </style>
+  {% endif %}
+
+  <div class="log-in-form-div">
+    <form class="log-in-form-form" method="POST">
+      {% csrf_token %}
+
+      <label for="username-login">Логин
+         <input id="username-login" name="username" type="text"
+                minlength="4" maxlength="20" required>
+      </label>
+
+      <label for="username-password">Пароль
+        <input id="username-password" name="password1"
+               type="password" required>
+      </label>
+
+      <input type="submit" value="✔">
+    </form>
+  </div>
+
+  {% if logerror == True %}
+    <script> logErrorScript(); </script>
+  {% endif %}
+
+{% endblock content %}
+
+
+{% block script_builder %}
+  <img class="content__painting" src="{% static 'images/blog/background.png' %}">
+
+  <script src="{% static 'scripts/blog_page_builder.js' %}"></script>
+  <script>
+    setAuthorLinks('{{ theme }}');
+    setPagesListeners({{ amount }}, {{ page }}, '{{ theme }}', '{{ author }}');
+    setThemeLinks('{{ author }}');
+
+    {% if request.user.is_authenticated == False %}
+      setLogInButton();
+    {% else %}
+      setLogOutButton('{{ user.get_username }}');
+    {% endif %}
+  </script>
+{% endblock script_builder %}

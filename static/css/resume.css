@@ -1,0 +1,87 @@
+/* DOCUMENT STYLES*/
+body {
+  overflow: hidden;
+}
+
+/* HEADER STYLES */
+.header {
+  border-bottom: 0.3vh solid black;
+  background: linear-gradient(to left bottom, rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.5));
+}
+
+/* background image */
+.content__paint {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50vw;
+  opacity: 0.4;
+}
+
+/* resume */
+.content__resume {
+  position: relative;
+  width: 40vw;
+  height: 60vh;
+  margin: 5vh;
+  border: 1vh groove grey;
+  border-radius: 10px;
+  background: rgba(128, 128, 82, 0.2);
+  overflow-y: auto;
+  z-index: 3;
+
+  -webkit-transition: .5s;
+  -moz-transition: .5s;
+  -o-transition: .5s;
+  transition: .5s;
+}
+.content__resume:hover {
+  background: rgba(214, 208, 208, 0.53);
+}
+
+.content__resume h2 {
+  margin: 3vh 0 4vh 2vh;
+  font-style: italic;
+}
+
+.content__resume h3 {
+  margin: 2vh;
+  font-size: 3vh;
+  font-style: italic;
+}
+.content__resume p {
+  margin: 2vh 5vh;
+  font-size: 2vh;
+}
+.content__resume ul {
+  margin: 2.5vh;
+}
+.content__resume li {
+  font-size: 2vh;
+}
+
+
+/* FOOTER STYLES */
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  border-top: 3px solid black;
+  background: linear-gradient(to right bottom, rgba(0, 0, 0, 0.5),
+              rgba(177, 177, 177, 0.7));
+}
+
+
+/* ADAPTIVE STYLES */
+@media screen and (max-width: 920px) {
+  .content__resume {
+    width: 60vw;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .content__resume {
+    width: 88vw;
+    margin: 5vh 5vw;
+  }
+}

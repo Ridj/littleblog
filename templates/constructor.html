@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Конструктор{% endblock title %}
+{% block header_title %}Конструктор блога{% endblock header_title %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/constructor.css' %}">
+{% endblock style %}
+
+
+
+
+{% block content %}
+  <div class="constructor editor">
+    <pre style="color: white">
+    </pre>
+  </div>
+
+  <div class="constructor view">
+    <fieldset class="blog__article" id="newarticle">
+      <legend>Название</legend>
+        <div class="blog__content" id="newcontent"></div>
+        <span class="blog__author">Автор: <b>{{ user.username }}</b></span>
+      </fieldset>
+  </div>
+
+  <div class="constructor menu">
+  </div>
+
+  <div class="constructor draggable">
+    <button>Li</button><button>div</button>
+    <button>span</button><button>h1</button>
+    <button>h2</button><button>h2</button>
+    <button>p</button><button>table</button>
+  </div>
+
+{% endblock content %}
+
+
+{% block script_builder %}
+  <script async type="text/javascript" src="//mod.imgbb.com/website.js" charset="utf-8"></script>
+  <script src="{% static 'scripts/constructor_page_builder.js'%}"></script>
+  <script src="{% static 'scripts/constructor.js'%}"></script>
+{% endblock script_builder %}

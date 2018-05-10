@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}{{ blog.name }}{% endblock title %}
+{% block header_title %}{{ blog.name }}
+  <span>(автор: <b>{{ blog.author }}</b>)</span>
+{% endblock header_title %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
+{% endblock style %}
+
+
+{% block addheader %}
+  <div class="header__log_buttons closed_h">
+
+    {% if request.user.is_authenticated != False %}
+      <span class="header__name">
+        <script> animateName('{{ user.get_username }}'); </script>
+      </span>
+    {% else %}
+      <a class="header__button"
+         onclick="registerUser('{{ request.get_full_path }}')">Регистрация</a>
+    {% endif %}
+
+    <span class="header__login">
+        <span class="header__switcher"></span>
+    </span>
+
+  </div>
+{% endblock addheader %}
+
+
+{% block content %}
+  <div class="select_color_scheme">
+    <input type="checkbox">
+    <label><i></i></label>
+  </div>
+
+  <fieldset class="blog__article" id="article{{ blog.id }}">
+    <legend>{{ blog.name }}</legend>
+
+    {% if blog.modified == null %}
+      <span class="blog__data data_created">Создан:
+        {{ blog.created|date:"H:i, M d, Y" }}</span>
+    {% else %}
+      <span class="blog__data data_created">Создан :
+      {{ blog.created|date:"H:i, M d, Y" }}</span>
+      <span class="blog__data data__modified">Изменён:
+      {{ blog.modified|date:"H:i, M d, Y" }}</span>
+    {% endif %}
+
+    <div class="blog__content" id="content{{ blog.id }}"></div>
+  </fieldset>
+
+  <div class="article__comments">
+
+    {% if comments.count > 0 %}
+      {% for comment in comments %}
+        <div class="comment">
+          <span class="comment_name">{{ comment.name }}</span>
+          <span class="comment_date">
+            ({{ comment.created|date:"H:i, d M, Y" }})<b>:</b></span>
+
+          <div class="comment_content"></div>
+
+          <script>
+            (function() {
+              let com_names = document.getElementsByClassName('comment_name');
+              let com_name = com_names[com_names.length - 1];
+              fillCommentsContent(com_name, '{{ comment.name }}');
+
+              let comments = document.getElementsByClassName('comment_content');
+              let comment = comments[comments.length - 1];
+              fillCommentsContent(comment, '{{ comment.content }}');
+            })();
+          </script>
+        </div>
+      {% endfor %}
+
+    {% else %}
+      <span class="no_comments_yet">К этому блогу ещё нет коментариев</span>
+    {% endif %}
+
+    <div class="new_comment">
+      <span class="com_title">Новый комментарий</span>
+      <form class="comments_outer_form" method="POST">
+        {% csrf_token %}
+
+        <table>
+          {{ com_form.as_table }}
+        </table>
+
+        <div align="center">
+          <input type="submit" value="Оставить комментарий">
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  {% if user.get_username == blog.author %}
+    <div class="article__buttons" align="right">
+      <span id="edit_blog" onclick="editBlog()">Изменить</span>
+      <span id="delete_blog"
+            onclick="confirmBlogDelete('{{ blog.id }}')">Удалить</span>
+    </div>
+  {% endif %}
+
+
+  <div class="log-in-form-div">
+    <form class="log-in-form-form" method="POST">
+      {% csrf_token %}
+
+      <label for="username-login">Логин
+         <input id="username-login" name="username" type="text"
+                minlength="4" maxlength="20" required>
+      </label>
+
+      <label for="username-password">Пароль
+        <input id="username-password" name="password1"
+               type="password" required>
+      </label>
+
+      <input type="submit" value="✔">
+    </form>
+  </div>
+
+
+  {% if logerror == True %}
+    <script> logErrorScript(); </script>
+  {% endif %}
+
+{% endblock content %}
+
+
+{% block script_builder %}
+
+  <script>
+    fillBlogContent('content{{ blog.id }}', '{{ blog.content }}');
+
+    {% if request.user.is_authenticated == False %}
+      setLogInButton();
+    {% else %}
+      setLogOutButton('{{ user.get_username }}');
+      setDefaultCommentaryName('{{ user.get_username }}');
+    {% endif %}
+
+  </script>
+
+  <script src="{% static 'scripts/article_page_builder.js' %}"></script>
+{% endblock script_builder %}

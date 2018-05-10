@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Разработчики{% endblock title %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/contacts.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+  <div class="content__fog"></div>
+
+  <img class="icon mac" title="Kato Basiro"
+       src="{% static 'images/contacts/mac.png' %}"
+       onclick="toggleInfo('.me')">
+  <img class="icon iphone" title="Николай Стрелков"
+       src="{% static 'images/contacts/iphone.png' %}"
+       onclick="toggleInfo('.assistant')">
+  <img class="content__menu" src="{% static 'images/contacts/menu.png' %}">
+  <img class="content__logo_me" src="{% static 'images/logo_me.png' %}">
+
+  <span class="menu_li li_1"><a href="../" title="Главная страница">🏠</a></span>
+  <span class="menu_li li_2"><a href="../blog/" title="Блог">📜</a></span>
+  <span class="menu_li li_3"><a href="../about/" title="Обо мне">🕵</a></span>
+  <span class="menu_li li_4"><a href="../resume/" title="Резюме">💼</a></span>
+  <span class="menu_li li_5"><a href="../easteregg/" title="Разработчики">🔧</a></span>
+
+  <div class="show_info me">
+    <img class="info__logo" src="{% static 'images/logo_me.png' %}"
+         onclick="toggleInfo('.me')" title="Закрыть" alt="logo">
+
+    <span class="info__name">
+      <span class="name_dark"></span>R.S.J. (open-source)
+    </span>
+    <span class="info__info" title="Информация" onclick="toggleAbout(0)">🛈</span>
+
+    <a class="info__vk" href="https://vk.com/katenkafelix" title="ВК"></a>
+  </div>
+
+  <div class="show_info assistant">
+    <img class="info__logo" src="{% static 'images/article/logo.png' %}"
+         onclick="toggleInfo('.assistant')" title="Закрыть" alt="Коля">
+
+    <a class="info__vk" href="https://vk.com/id192692859" title="Мой ВК"></a>
+
+    <span class="info__info" title="Информация" onclick="toggleAbout(1)">🛈</span>
+    <span class="info__name"><span class="name_dark"></span>Николай Стрелков</span>
+  </div>
+
+  <div class="developers_info">
+
+    <fieldset class="developers_fieldset">
+      <legend>RSJ</legend>
+      <p>Develop involvement:</p>
+      <ul><li>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_css.png' %}">
+          <b>CSS/HTML:</b> <i>Stylesheets, DOM structure, Animation, Adaptation</i>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_html.png' %}">
+        </li><li>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_dja.png' %}">
+          <b>Django Framework:</b> <i>Backend, Templates, Forms</i>
+        </li><li>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_ps.png' %}">
+          <b>Photoshop:</b> <i>Backgrounds, Images, Logos</i>
+        </li><li>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_js.png' %}">
+          <b>JavaScript:</b> <i>Listeners, Optimization</i>
+        </li><li>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_git.png' %}">
+          <b>Github:</b> <i>Versions control q.s.</i>
+        </li><li>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_psq.png' %}">
+          <b>PostgreSQL:</b> <i>Data bases</i>
+        </li><li>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_pyt.png' %}">
+          <b> Python:</b> <i>Server side</i>
+        </li><li><br>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_lin.png' %}">
+          Build on <b>Linux Gnome</b> & <b>Windows 10</b>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_win.png' %}">
+        </li>
+      </ul><br><br>
+
+      <span class="developers_fieldset_close" title="Закрыть"
+            onclick="toggleAbout(0)">⌧</span>
+    </fieldset>
+
+  </div>
+
+  <div class="developers_info">
+
+    <fieldset class="developers_fieldset">
+      <legend>Николай Стрелков</legend>
+      <p>Участие в разработке компонентов:</p>
+      <ul><li>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_htm.png' %}">
+          <b>HTML:</b> <i>Вёрстка</i>
+        </li><li>
+          <img class="inner_li_img" src="{% static 'images/contacts/prs_psh.png' %}">
+          <b>Photoshop:</b> <i>Изображения, Логотип</i>
+        </li><li>
+          <img class="inner_li_img" src="{% static 'images/logo.png' %}">
+          <b>Контент:</b> <i>Наполнение сайта, Ведение блога</i>
+        </li>
+      </ul>
+      <p>Контакты:</p>
+      <ul>
+        <li>г.Гатчина, п.Суйда, ул.Центральная д.9</li>
+        <li>Телефон: +7-911-178-91-41</li>
+      </ul><br><br>
+
+      <span class="developers_fieldset_close" title="Закрыть"
+            onclick="toggleAbout(1)">⌧</span>
+    </fieldset>
+
+  </div>
+
+{% endblock content %}
+
+
+{% block script_builder %}
+  <script src="{% static 'scripts/contacts_page_builder.js' %}"></script>
+{% endblock script_builder %}

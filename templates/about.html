@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Николай Стрелков{% endblock title %}
+{% block header_title %}Обо мне{% endblock header_title %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/about.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+  <fieldset class="content__disclaimer open">
+    <legend>Дисклеймер</legend>
+      <p>На данной странице я попытаюсь максимально кратко и информативно
+         донести большинство информации о себе.</p>
+      <span class="content__disclaimer_control d__closer"
+            title="Скрыть дисклеймер">⌧</span>
+  </fieldset>
+
+  <span class="content__disclaimer_control d__opener"
+        title="Показать дисклеймер">❔ Показать дисклеймер ❔</span>
+
+  <div class="content__text">
+    <img class="content__book" alt="book"
+         src="{% static 'images/about/book.png' %}">
+    <h3 class="content__text_title">Характеристика</h3>
+
+    <div class="content__content_main">
+      <p>Стрелков Николай Александрович</p>
+      <p>Дата рождения: 16.12.2002</p>
+      <img class="content__content_main__university" alt="university"
+           src="{% static 'images/about/university.png' %}">
+    </div><br>
+    <p>
+        Являюсь учеником МБОУ "Выскоключевая СОШ", в настоящее время заканчиваю
+        обучение в 9-ом классе. Средний балл успеваемости: 4,7<br><br>
+        Проявляю себя как адекватного и спокойного человека. Не допускаю
+        пропусков занятий и нарушения дисциплины. Веду активный образ жизни.
+        Избегаю конфликтных ситуаций и обстоятельств подобного рода. В
+        большинстве жизненных ситуаций предпочитаю свободомыслие.
+    </p><hr>
+    <p>
+        Стараюсь быть добрым, независимым и образованным человеком. При общении
+        вежлив - как со взрослыми людьми, так и с ровесниками. Пользуюсь
+        авторитетом среди друзей и товарищей. Не хочу подстраиваться под
+        обстоятельства, зависить от общества в целом и окружающего меня
+        социума в частности, скорее, наоборот - придерживаюсь пределов, в
+        которых ощущаю себя комфортно.
+    </p>
+
+    <div class="content__list">
+      <p>Развиваю такие качества, как:</p>
+      <ul>
+        <li>Целеустремленность</li><li>Трудолюбие</li><li>Саморазвитие</li>
+        <li>Эмоциональная устойчивость</li><li>Организованность</li>
+      </ul>
+
+      <img class="content__content_main__pc" alt="pc"
+           src="{% static 'images/about/pc.png' %}">
+      <img class="content__content_main__leader" alt="leader"
+           src="{% static 'images/about/leader.png' %}">
+    </div><br><br><br><hr>
+
+    <p>
+        Мне интересна деятельность, связанная с душевной сферой: рисование,
+        музыка и прочее. У меня хорошо развита фантазия и душевное
+        разнообразие. В определенных ситуациях я проявляю себя как человек
+        творческий и креативный.
+    </p>
+  </div>
+{% endblock content %}
+
+
+{% block script_builder %}
+    <script src="{% static 'scripts/about_page_builder.js' %}"></script>
+{% endblock script_builder %}

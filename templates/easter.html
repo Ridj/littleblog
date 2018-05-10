@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Dev Notes{% endblock title %}
+{% block header_title %}Dev Notes{% endblock header_title %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/easter.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+  {% if user.get_username == "Kato" %}
+    <button onclick="clearBackup()">Очистить бэкап</button>
+  {% endif %}
+{% endblock content %}
+
+{% block script_builder %}
+  <script src="{% static 'scripts/easter_page_builder.js'%}"></script>
+{% endblock script_builder %}

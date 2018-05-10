@@ -1,0 +1,84 @@
+body {
+  overflow: hidden;
+}
+
+.header, .footer {
+  display: none;
+}
+
+#menu-icon {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+}
+
+.constructor {
+  position: absolute;
+  overflow: auto;
+  cursor: pointer;
+
+  -webkit-transition: 1s;
+  -moz-transition: 1s;
+  -o-transition: 1s;
+  transition: 1s;
+}
+
+.editor {
+  z-index: 5;
+  background: rgba(255, 255, 255, .2);
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: auto;
+}
+
+.editor pre {
+  position: inherit;
+  bottom: 15vh;
+  left: 15vw;
+  height: 60vh;
+  width: 70vw;
+}
+
+.view {
+  z-index: 6;
+  background: rgba(128, 0, 0, .4);
+  height: 60vh;
+  top: -50vh;
+  margin-left: 10vw;
+  border-radius: 0 0 20% 20%;
+  width: 80vw;
+}
+.view:hover {
+  top: -5vh;
+}
+
+.draggable {
+  z-index: 7;
+  background: rgba(0, 128, 0, .4);
+  height: 60vh;
+  width: 40vw;
+  top: 35vh;
+  left: -35vw;
+  border-radius: 0 20% 20% 0;
+}
+.draggable:hover {
+  left: -5vw;
+}
+
+.menu {
+  z-index: 8;
+  height: 60vh;
+  width: 25vw;
+  top: 35vh;
+  right: -20vw;
+  border-radius: 20% 0 0 20%;
+  background: rgba(0, 0, 128, .4);
+}
+.menu:hover {
+  right: -2vw;
+}

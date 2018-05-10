@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Регистрация{% endblock title %}
+{% block header_title %}Регистрация{% endblock header_title %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+
+  <form class="registration__form" method="POST">
+    {% csrf_token %}
+
+    <table>
+      {{ reg_form.as_table }}
+    </table>
+
+    <input class="helper" type="submit" value="Зарегистрироваться">
+  </form>
+
+{% endblock content %}
+
+
+{% block script_builder %}
+  <script src="{% static 'scripts/reg_page_builder.js'%}"></script>
+{% endblock script_builder %}
