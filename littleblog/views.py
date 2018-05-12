@@ -28,7 +28,7 @@ def article(request, blog_id):
 def blog(request, page=1):
     """
     Blogs section view, checks authentication.
-    :param request: action, auth, blogs query selectors, login form
+    :param request: action, auth, blogs query selectors, login form, scheme
     :param page: current page
     :return: blogs OR constructor (+ deleted) OR error template
     """
@@ -53,12 +53,14 @@ def blog(request, page=1):
     # Count is amount of blogs pages for current query selection
     page = try_page(page)
     count = ceil(len(blogs[0])/5)
+    scheme = request.GET.get('scheme', "")
     data = {
         'amount': count,                        # Amount of pages
         'author': blogs[2],
         'blogs': blogs[0][(page-1)*5:page*5],   # Articles for current page
         'logerror': logerror,                   # Login failed flag
         'page': page,                           # Current page
+        'scheme': scheme,                       # Color scheme
         'theme': blogs[1]
     }
 
@@ -67,12 +69,13 @@ def blog(request, page=1):
 
 def easteregg(request):
     action = request.GET.get('action', "")
+    scheme = request.GET.get('scheme', "")
     if action == 'cdb':
         username = request.user.get_username()
         if username == 'Kato':
             clear_backup_db()
     # --on progress-- Developer's notes
-    return render(request, 'easter.html')
+    return render(request, 'easter.html', context={"scheme": scheme})
 
 
 def registration(request):
@@ -84,6 +87,7 @@ def registration(request):
 
     # Right away after logout registration's failed login issue solution
     next_url = request.GET.get("next", "").replace('?action=logout', '')
+    scheme = request.GET.get('scheme', "")
     if request.method == 'POST':
         # Registration
         user = UserForm(request.POST)
@@ -95,7 +99,8 @@ def registration(request):
         user = UserForm()
     return render(request, 'register.html', context={
         'next_url': next_url,
-        'reg_form': user       # Registration form
+        'reg_form': user,       # Registration form
+        'scheme': scheme
     })
 
 
@@ -103,7 +108,8 @@ def registration(request):
 
 def about(request):
     # About static page view
-    return render(request, 'about.html')
+    scheme = request.GET.get('scheme', "")
+    return render(request, 'about.html', context={"scheme": scheme})
 
 
 def error(request):
@@ -113,21 +119,27 @@ def error(request):
 
 def contacts(request):
     # Developers static page view
-    return render(request, 'contacts.html')
+    scheme = request.GET.get('scheme', "")
+    return render(request, 'contacts.html', context={"scheme": scheme})
 
 
 def index(request):
     # Start page view with last article (or two if allowed by window height)
     blogs = Blog.objects.all().order_by('-id')[0:2]
+    scheme = request.GET.get('scheme', "")
+    if scheme == "":
+        scheme = 'day'
     return render(request, 'index.html', context={
         'blog': blogs[0],       # Last article
-        'preblog': blogs[1]     # Pre-last article
+        'preblog': blogs[1],    # Pre-last article
+        'scheme': scheme
     })
 
 
 def resume(request):
     # Resume static page view
-    return render(request, 'resume.html')
+    scheme = request.GET.get('scheme', "")
+    return render(request, 'resume.html', context={'scheme': scheme})
 
 
 # GET METHOD FUNCTIONS
@@ -142,6 +154,7 @@ def get_article(request, b_id):
 
     # Authentication & getting error message if occured
     logerror = loghelper(request)
+    scheme = request.GET.get('scheme', "")
 
     try:
         current_blog = Blog.objects.get(id=b_id)
@@ -152,7 +165,8 @@ def get_article(request, b_id):
             'blog': current_blog,       # Article
             'comments': comments,
             'com_form': comments_form,
-            'logerror': logerror        # Login failed flag
+            'logerror': logerror,        # Login failed flag
+            'scheme': scheme
         })
 
     except Blog.DoesNotExist:
@@ -165,8 +179,12 @@ def get_article(request, b_id):
 
 def get_constructor(request):
     # Authentication check for constructor
+    scheme = request.GET.get('scheme', "")
     if request.user.is_authenticated:
-        return render(request, 'constructor.html', context={'type': 'new'})
+        return render(request, 'constructor.html', context={
+            'scheme': scheme,
+            'type': 'new'
+        })
     else:
         # Invalid permission error
         return render(request, 'error.html', context={'type': 'permission'})
@@ -181,6 +199,7 @@ def get_delete_blog(request):
 
     username = request.user.get_username()
     blog_id = request.GET.get("blog_id")
+    scheme = request.GET.get('scheme', "")
 
     try:
         blog_to_del = Blog.objects.get(id=blog_id)
@@ -195,7 +214,8 @@ def get_delete_blog(request):
 
         return render(request, 'deleted.html', context={
             'deleted_id': backup.id,
-            'deleted_name': backup.name
+            'deleted_name': backup.name,
+            'scheme': scheme
         })
     else:
         # Another user's article deletion try error
@@ -214,6 +234,7 @@ def get_restore_blog(request):
 
     username = request.user.get_username()
     blog_id = request.GET.get("deleted_id")
+    scheme = request.GET.get('scheme', "")
 
     try:
         blog_restore = Deleted.objects.get(id=blog_id)
@@ -226,7 +247,8 @@ def get_restore_blog(request):
         restored = record_to_db(Blog(), blog_restore, False)
         blog_restore.delete()
 
-        return HttpResponseRedirect('/blog/post/' + str(restored.id) + '/')
+        return HttpResponseRedirect('/blog/post/' + str(restored.id) +
+                                    '/?scheme=' + scheme)
     else:
         # Another user's article restoration try error
         return render(request, 'error.html', context={
@@ -247,6 +269,7 @@ def post_comment(request, b_id):
 
     comment = CommentForm(request.POST)
 
+    scheme = request.GET.get('scheme', "")
     if comment.is_valid():
         # Create comment & redirect to article view
         comment = Comment()
@@ -254,7 +277,8 @@ def post_comment(request, b_id):
         comment.name = request.POST.get('name')
         comment.content = request.POST.get('content')
         comment.save()
-        return HttpResponseRedirect('/blog/post/' + str(b_id) + '/')
+        return HttpResponseRedirect('/blog/post/' + str(b_id) + '/?scheme=' +
+                                    scheme)
 
     else:
         # Invalid comment error
@@ -362,10 +386,11 @@ def record_to_db(model, from_blog, request):
 
 def redirect(request, address=""):
     # Redirect for requests from /Blog/post/ & /Blog/page/ sections
+    scheme = request.GET.get('scheme', "")
     if address == "":
         # Start page redirect
-        return HttpResponsePermanentRedirect("/")
-    return HttpResponsePermanentRedirect("/" + address + "/")
+        return HttpResponsePermanentRedirect("/?scheme=" + scheme)
+    return HttpResponsePermanentRedirect("/" + address + "/?scheme=" + scheme)
 
 
 def try_page(page):

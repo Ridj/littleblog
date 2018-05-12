@@ -91,6 +91,8 @@
            alt="AWESOME">
     </div>
 
+  </div>
+
 
     <fieldset class="blog__article hide_blog" id="article{{ preblog.id }}">
       <legend>{{ preblog.name }}</legend>
@@ -107,15 +109,13 @@
       {% endif %}
 
       <span class="blog__link">
-        <a href="/blog/post/{{ preblog.id }}/">Читать полностью</a>
+        <a href="/blog/post/{{ preblog.id }}/?scheme={{ scheme }}">Читать полностью</a>
       </span>
 
       <div class="blog__content" id="content{{ preblog.id }}"></div>
 
       <span class="blog__author">Автор: <b>{{ preblog.author }}</b></span>
     </fieldset>
-
-  </div>
 
 
   <fieldset class="blog__article" id="article{{ blog.id }}">
@@ -133,7 +133,7 @@
     {% endif %}
 
     <span class="blog__link">
-      <a href="/blog/post/{{ blog.id }}/">Читать полностью</a>
+      <a href="/blog/post/{{ blog.id }}/?scheme={{ scheme }}">Читать полностью</a>
     </span>
 
     <div class="blog__content" id="content{{ blog.id }}"></div>
@@ -146,6 +146,10 @@
 
 {% block script_builder %}
   <script>
+    // Articles links
+    setAuthorLinks('', '{{ scheme }}');
+    setThemeMainLinks('{{ scheme }}');
+
     // Filter blogs content from bad symbols
     fillBlogContent('content{{ blog.id }}', '{{ blog.content }}');
     fillBlogContent('content{{ preblog.id }}', '{{ preblog.content }}');

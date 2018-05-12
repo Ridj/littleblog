@@ -6,6 +6,7 @@
 
 {% block style %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/constructor.css' %}">
 {% endblock style %}
 
@@ -19,11 +20,27 @@
   </div>
 
   <div class="constructor view">
-    <fieldset class="blog__article" id="newarticle">
-      <legend>Название</legend>
-        <div class="blog__content" id="newcontent"></div>
+    <div class="view_inner">
+      <fieldset class="blog__article" id="newarticle">
+        <legend>Название</legend>
+        <div class="blog__content" id="newcontent"><ul>
+            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
+            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
+            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
+            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
+            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
+            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
+          </ul><pre>ssasassaasassaassasasasssasaassasasasaasasassasassasasasaassssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss ssasassaasassaassasasasssasaassasasasaasasassasassasasasaassssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</pre></div>
         <span class="blog__author">Автор: <b>{{ user.username }}</b></span>
       </fieldset>
+    </div>
+
+    <button class="fix_button"
+            onclick="fixConstructorView()">📌</button>
+    <button class="view_button"
+            onclick="changeConstructorView()">💠</button>
+
+    <img class="content__painting" src="{% static 'images/blog/background.png' %}">
   </div>
 
   <div class="constructor menu">
@@ -34,6 +51,7 @@
     <button>span</button><button>h1</button>
     <button>h2</button><button>h2</button>
     <button>p</button><button>table</button>
+    <input type="file" accept="image/jpeg,image/png">
   </div>
 
 {% endblock content %}

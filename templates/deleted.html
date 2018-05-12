@@ -5,10 +5,16 @@
 {% block header_title %}Удаление завершено{% endblock header_title %}
 
 {% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/deleted.css' %}">
 {% endblock style %}
+
+{% block addheader %}
+  <button class="anime_go" onclick="regWordsRanomizer()">Go!</button>
+  <button class="anime_stop" onclick="deleteAllAnimations()">Off</button>
+{% endblock addheader %}
 
 
 {% block content %}
@@ -19,10 +25,10 @@
   </p>
 
   <input class="helper" type="submit" value="Восстановить"
-         onclick="restoreBlog('{{ deleted_id }}')">
+         onclick="restoreBlog('{{ deleted_id }}', '{{ scheme }}')">
 {% endblock content %}
 
 
 {% block script_builder %}
-  <script src="{% static 'scripts/reg_page_builder.js'%}"></script>
+  <script src="{% static 'scripts/del_page_builder.js'%}"></script>
 {% endblock script_builder %}

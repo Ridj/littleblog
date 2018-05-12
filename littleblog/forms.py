@@ -13,6 +13,7 @@ class ArticleForm(forms.Form):
                            widget=forms.TextInput(attrs={
                                'class': 'article__form_name'
                            }))
+    content = forms.CharField()
 
 
 class CommentForm(forms.Form):

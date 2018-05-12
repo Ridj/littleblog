@@ -1,17 +1,15 @@
 (function() {
-  // Articles links
-  setAuthorLinks('');
-  setThemeMainLinks();
-
   // Image-boxes animation
   setHideIntervalsToImages();
 
   // Penult article's visibility test
   checkHideBlogVisibility();
-  window.addEventListener('resize', checkHideBlogVisibility, false);
+  window.addEventListener('resize', function() {
+    setTimeout(checkHideBlogVisibility, 1);
+  }, false);
 
   // Footer opacity listener
   setTimeout(function() {
-    addFooterListeners('closed');
+    addFooterListeners('closed_h');
   }, 1000);
 })();

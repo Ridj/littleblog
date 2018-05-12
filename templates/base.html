@@ -4,6 +4,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
     {% block title %}AWESOME{% endblock title %}
@@ -18,13 +19,17 @@
 
   <script src="{% static 'scripts/functions.js' %}"></script>
 </head>
-<body>
+<body {% if scheme == 'night' %}class="red_scheme_body"{% endif %}>
 
   <div class="header">
   {% block header %}
 
     <img id="menu-icon" class="header__menu_icon"
+            {% if scheme == 'night' %}
+         src="{% static 'images/article/menu.png' %}"
+            {% else %}
          src="{% static 'images/menu.png' %}"
+            {% endif %}
          onclick="toggleMenu()" alt="menu">
 
     <h1 class="header__title">
@@ -32,14 +37,18 @@
     </h1>
 
     <img class="header__logo" alt="Strelkov"
-         src="{% static 'images/logo.png' %}">
+            {% if scheme == 'night' %}
+         src="{% static 'images/article/logo.png' %}"
+            {% else %}
+         src="{% static 'images/logo.png' %}"
+            {% endif %}>
 
     <ul class="header__menu">
-      <li><a href="../index/">Главная страница</a></li>
-      <li><a href="../blog/">Блог</a></li>
-      <li><a href="../about/">Обо мне</a></li>
-      <li><a href="../resume/">Резюме</a></li>
-      <li><a href="../developers/">Разработчики</a></li>
+      <li><a href="../index/?scheme={{ scheme }}">Главная страница</a></li>
+      <li><a href="../blog/?scheme={{ scheme }}">Блог</a></li>
+      <li><a href="../about/?scheme={{ scheme }}">Обо мне</a></li>
+      <li><a href="../resume/?scheme={{ scheme }}">Резюме</a></li>
+      <li><a href="../developers/?scheme={{ scheme }}">Разработчики</a></li>
     </ul>
 
   {% endblock header %}
@@ -56,7 +65,11 @@
     <img class="footer__logo_me" alt="RSJ" title="R.S.J." name="logo"
          src="{% static 'images/logo_me.png' %}">
     <img class="footer__logo" name="logo" alt="logo"
-         src="{% static 'images/logo.png' %}">
+            {% if scheme == 'night' %}
+         src="{% static 'images/article/logo.png' %}"
+            {% else %}
+         src="{% static 'images/logo.png' %}"
+            {% endif %}>
 
     <a class="footer__link" href="https://vk.com/id192692859" title="ВК"></a>
     <img class="footer__down" src="{% static 'images/footer_down.png' %}">

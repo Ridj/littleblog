@@ -34,7 +34,7 @@ body {
 
 /* HEADER STYLES */
 .header {
-  border-bottom: 2px solid grey;
+  border-bottom: 0.3vh solid grey;
   background: linear-gradient(to left bottom, rgba(0, 0, 0, 0.6), rgba(255, 255, 255, 0.8));
   background-size: 100% 100%;
   transition: opacity 1.5s;
@@ -42,6 +42,7 @@ body {
 }
 
 .header__menu_icon {
+  position: relative;
   height: 2.5vw;
   min-height: 36px;
   max-height: 9vh;
@@ -49,6 +50,7 @@ body {
   min-width: 42px;
   padding: calc(1vw + 8px);
   cursor: pointer;
+  z-index: 5;
 
   -webkit-transition: .5s;
   -moz-transition: .5s;
@@ -142,8 +144,9 @@ body {
 /* blog article */
 .blog__article {
   position: relative;
-  height: 25vh;
+  height: 33vh;
   width: 85vw;
+  max-width: 85vw;
   margin: 5vh 0 5vh 5vw;
   padding: 1vw;
   border: .5vw dotted black;
@@ -216,7 +219,15 @@ body {
 }
 
 .blog__content {
-  padding: 2vh 0 2vh 7.5vw;
+  padding: 2vh 1.5vw 2vh 3.5vw;
+  width: 80vw;
+  max-width: 80vw;
+}
+
+.blog__content pre {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
 }
 
 /* blog link */
@@ -350,6 +361,7 @@ body {
   background: url(../images/vk.png);
   background-size: 100% 100%;
   text-decoration: none;
+  outline: none;
   z-index: 1;
 
   -webkit-transition: 1s;
@@ -434,7 +446,104 @@ body {
 }
 
 
+/* NIGHT SCHEME */
+.red_scheme_body .header {
+  border-color: rgba(178, 34, 34, 0.71);
+  background: linear-gradient(to right top, rgba(0, 0, 0, 0.1),
+              rgba(178, 34, 34, 0.2));
+}
+
+.red_scheme_body .header__title b {
+  text-shadow: azure 0 0 2px;
+  color: rgba(0, 0, 0, .3);
+}
+
+.red_scheme_body .header__menu li a {
+  background: linear-gradient(to right top, rgba(94, 94, 94, 0.82),
+  rgba(83, 7, 17, 0.67));
+}
+.red_scheme_body .header__menu li a:hover {
+  background: rgba(240, 255, 255, 0.82);
+}
+
+.red_scheme_body .create_blog {
+  border-color: rgba(178, 34, 34, 0.7);
+}
+.red_scheme_body .create_blog:hover {
+  background: rgba(96, 7, 34, 0.6);
+}
+
+.red_scheme_body .header__switcher {
+  background: linear-gradient(to right top, rgba(0, 0, 0, .2), rgba(211, 211, 211, .4));
+  color: rgba(0, 0, 0, .7);
+}
+
+.red_scheme_body .blog__article {
+  border-color: firebrick;
+}
+
+.red_scheme_body .blog__article legend {
+  border-color: transparent;
+  background: linear-gradient(to left bottom, firebrick, rgba(111, 111, 111, .7));
+}
+.blog__article legend:hover {
+  box-shadow: 0 15px 15px -10px rgba(0,0,0, .5);
+  text-shadow: 3vw 4.5vh 1px rgba(181, 0, 38, 0.4),
+               calc(3vw + 2px) calc(4.5vh + 2px) 1px rgba(0, 0, 0, .1);
+}
+
+.red_scheme_body .blog__author {
+  background: rgba(243, 199, 0, 0.85);
+  text-shadow: black 0.07vh 0.07vh 0.07vh, grey 0.3vh 0.2vh 0.2vh,
+    0 3px 5px rgba(0, 0, 0, 0.38),
+    3px 5px 5px rgba(104, 4, 42, 0.35),
+    0 0 5px lavender,
+    0 0 10px lavender;
+}
+
+.red_scheme_body .blog__theme {
+  border: 2px dotted rgba(213, 174, 0, 0.72);
+  color: rgba(195, 157, 0, 0.56);
+}
+
+.red_scheme_body .blog__article .blog__data {
+  background: firebrick;
+}
+
+.red_scheme_body .blog__article .blog__link a {
+  box-shadow: .1vh .2vh .2vh rgba(0, 0, 0, 0.78),
+    0 0 .05vh rgba(230, 230, 250, 0.57),
+    0 0 .1vh rgba(230, 230, 250, 0.53),
+    0 0 .15vh rgba(230, 230, 250, 0.47);
+  border-color: rgba(55, 4, 9, 0.26);
+  background: linear-gradient(to left bottom, rgba(132, 85, 110, 0.66),
+  rgba(107, 121, 117, 0.66));
+  color: rgba(241, 241, 241, 0.91);
+  text-shadow: black 0.07vh 0.07vh 0.07vh, grey 0.3vh 0.2vh 0.2vh,
+    0 3px 5px rgba(0, 0, 0, 0.38),
+    3px 5px 5px rgba(104, 4, 42, 0.35),
+    0 0 5px lavender,
+    0 0 10px lavender;
+}
+
+.red_scheme_body .no_comments_yet {
+  color: rgba(0, 0, 0, .7);
+}
+
+.red_scheme_body footer {
+  border-color: firebrick;
+  background: linear-gradient(to left bottom, rgba(0, 0, 0, 0.1),
+              rgba(178, 34, 34, 0.4));
+}
+
+
 /* ADAPTIVE STYLES */
+@media screen and (max-width: 450px) {
+  .blog__data {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 400px) {
   .header {
     white-space: nowrap;

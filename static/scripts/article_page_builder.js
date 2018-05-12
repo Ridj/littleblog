@@ -2,9 +2,6 @@
   // Footer listener
   addFooterListeners('closed');
 
-  // Color scheme selector
-  setColorSchemeSelector();
-
   // Login button listeners
   addBlogHeaderListeners();
 

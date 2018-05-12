@@ -5,9 +5,6 @@
   // Login button listener
   addBlogHeaderListeners();
 
-  // Articles theme selector
-  createThemeSelector();
-
   // Theme selector listener
   closeSelectorOnLeaveMouse();
 

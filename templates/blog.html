@@ -43,8 +43,12 @@
 
 {% block content %}
   <div class="blog__pages" align="center"></div>
-
   <div class="select_theme"></div>
+
+  <div class="select_color_scheme blog_scheme">
+    <input type="checkbox">
+    <label><i></i></label>
+  </div>
 
   {% if amount > 0 %}
     {% for blog in blogs %}
@@ -61,7 +65,7 @@
         {% endif %}
 
         <span class="blog__link">
-          <a href="/blog/post/{{ blog.id }}/">Читать полностью</a>
+          <a href="/blog/post/{{ blog.id }}/?scheme={{ scheme }}">Читать полностью</a>
         </span>
 
         <span class="blog__theme">{{ blog.theme }}</span>
@@ -113,13 +117,24 @@
 
 
 {% block script_builder %}
-  <img class="content__painting" src="{% static 'images/blog/background.png' %}">
+  <img class="content__painting
+  {% if scheme == 'night' %} opacity_paint"
+       src="{% static 'images/blog/background1.png' %}
+  {% else %}"
+      src="{% static 'images/blog/background.png' %}
+  {% endif %}">
 
-  <script src="{% static 'scripts/blog_page_builder.js' %}"></script>
   <script>
+    // Color scheme selector
+    setColorSchemeSelector('{{ scheme }}');
+
     setAuthorLinks('{{ theme }}');
     setPagesListeners({{ amount }}, {{ page }}, '{{ theme }}', '{{ author }}');
     setThemeLinks('{{ author }}');
+
+    // Articles theme selector
+    createThemeSelector();
+
 
     {% if request.user.is_authenticated == False %}
       setLogInButton();
@@ -127,4 +142,5 @@
       setLogOutButton('{{ user.get_username }}');
     {% endif %}
   </script>
+  <script src="{% static 'scripts/blog_page_builder.js' %}"></script>
 {% endblock script_builder %}

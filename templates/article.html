@@ -38,7 +38,7 @@
     <label><i></i></label>
   </div>
 
-  <fieldset class="blog__article" id="article{{ blog.id }}">
+  <fieldset class="blog__article art_add" id="article{{ blog.id }}">
     <legend>{{ blog.name }}</legend>
 
     {% if blog.modified == null %}
@@ -102,7 +102,7 @@
 
   {% if user.get_username == blog.author %}
     <div class="article__buttons" align="right">
-      <span id="edit_blog" onclick="editBlog()">Изменить</span>
+      <span id="edit_blog" onclick="editBlog('{{ blog.id }}')">Изменить</span>
       <span id="delete_blog"
             onclick="confirmBlogDelete('{{ blog.id }}')">Удалить</span>
     </div>
@@ -139,6 +139,9 @@
 
   <script>
     fillBlogContent('content{{ blog.id }}', '{{ blog.content }}');
+
+    // Color scheme selector
+    setColorSchemeSelector('{{ scheme }}');
 
     {% if request.user.is_authenticated == False %}
       setLogInButton();

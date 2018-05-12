@@ -11,7 +11,7 @@
 
 {% block content %}
   <div class="content__resume">
-    <h2>Стрелков Николай Александрович</h2>
+    <h2>Стрелков Николай Александрович</h2><hr>
     <h3>Образование:</h3>
     <ul>
       <li>МБОУ "Выскоключевая СОШ".</li>
@@ -27,20 +27,23 @@
     <p>
       Уверенный пользователь ПК (в том числе - офисные программы, основы Pascal,
       основы CSS/HTML, основы Photoshop); опыт разрешения конфликтных ситуации.
-    </p>
+    </p><hr>
 
     <h3>Личные качества:</h3>
     <p>
       Добропорядочность, усердие в работе и учёбе, пунктуальность, собранность.
-    </p>
+    </p><br><br>
 
   </div>
 
-  <img class="content__paint" src="{% static 'images/resume/landscape.png' %}">
+  <img class="content__paint" src="
+    {% if scheme != 'night' %}{% static 'images/resume/landscape.png' %}
+    {% else %} {% static 'images/resume/landscape1.png' %}{% endif %}">
 
 {% endblock content %}
 
 
 {% block script_builder %}
-    <script src="{% static 'scripts/resume_page_builder.js' %}"></script>
+  <script src="{% static 'scripts/resume_page_builder.js' %}"></script>
+  {% if scheme == 'night' %}<script>ghost()</script>{% endif %}
 {% endblock script_builder %}

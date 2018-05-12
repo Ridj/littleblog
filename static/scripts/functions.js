@@ -15,7 +15,6 @@ function addBlogHeaderListeners() {
 // Names opacity toggle on dev-block hover
 function addContactsHover() {
   let devs = document.getElementsByClassName('show_info');
-  console.log(devs)
     for (let i = 0; i < devs.length; i++) {
       devs[i].addEventListener('mouseenter', function() {
         document.getElementsByClassName('name_dark')[i]
@@ -42,7 +41,7 @@ function addDisclaimerListeners() {
 // On footer's hover: footer opacity, logos reverse & scale
 function addFooterListeners(class_name) {
   let footer = document.getElementsByClassName('footer')[0];
-    footer.classList.add(class_name);
+      footer.classList.add(class_name);
 
     footer.onmouseenter = function() {
       footer.classList.remove(class_name);
@@ -99,8 +98,10 @@ function addNoDragListeners() {
 
 
 // User's name animation randomizer
-function animateName(name) {
+function animateName(name, opt=false) {
   let num = name.length;
+  let css = '';
+
   let styles = [
     ['balance ', 's ease-out 2; transform-origin: 0 100% 0'],
     ['shrinkjump ', 's ease-in-out 2; transform-origin: bottom center'],
@@ -108,58 +109,74 @@ function animateName(name) {
     ['rotate ', 's ease-out 2'],
     ['toplong ', 's linear 2'],
   ];
+
   let colors = ['bisque', 'black', 'lavander', 'burlywood', 'darkgrey',
     'red', 'magenta', 'fuchsia', 'lightcoral', 'orangered',
     'green', 'yellow', 'greenyellow', 'darkolivegreen', 'springgreen',
     'blue', 'blueviolet', 'cyan', 'dodgerblue', 'lightsteelblue'
   ];
-  let css = '';
-
-  let h_name = document.getElementsByClassName('header__name')[0];
-    for (let i = 0; i < num; i++) {
-      let letter = document.createElement('span');
-        letter.textContent = name[i];
-        letter.classList.add('letters_animation' + i);
-        let styleNow = styles[Math.floor(Math.random() * 4.99)];
-        css += '.letters_animation' + i + '.active {animation: ' +
-          styleNow[0] + (1 + Math.floor(Math.random() * 20) / 10) + styleNow[1] +
-          '; color: ' + colors[Math.floor(Math.random() * 19.99)] +  ';} ' +
-          '.letters_animation' + i + ' {color: ' +
-          colors[Math.floor(Math.random() * 19.99)] +  ';}';
-
-        letter.addEventListener('animationend', () => {
-		      event.target.classList.remove('active');
-	      });
-        setTimeout(() => {
-          letter.classList.add('active');
-          }, Math.floor(Math.random() * 3000));
-
-      if (name[i] === ' ') {
-        letter.innerHTML = '<pre> </pre>'
-      }
-      h_name.appendChild(letter)
+    let h_name;
+    if (opt) {
+      h_name = createSpan(opt);
+      document.body.appendChild(h_name);
+    } else {
+      h_name = document.getElementsByClassName('header__name')[0];
     }
 
-    h_name.addEventListener('click', function() {
-      document.location.href = "/blog/page/1?author=" + name;
-    });
+  css += createLettersForAnimation(name, num, styles, colors, h_name, css, opt);
 
-  let header = document.getElementsByClassName('header')[0];
-    header.addEventListener('mouseleave', function() {
-      let spans = document.querySelectorAll('.header__name span');
-        for (let i = 0; i < spans.length; i++) {
-          spans[i].classList.add('active');
+    if (opt === false) {
+      let header = document.getElementsByClassName('header')[0];
+        h_name.addEventListener('click', function() {
+          document.location.href = "/blog/page/1?author=" +
+            name + checkColorScheme();
+        });
+
+        header.addEventListener('mouseleave', function() {
+          let spans = document.querySelectorAll('.header__name span');
+            for (let i = 0; i < spans.length; i++) {
+              if (!spans[i].classList.contains('active')) {
+                spans[i].classList.add('active');
+              }
+            }
+        });
+
+      css += '.header__name {width: calc(' + num + 'vw + ' + num + '0px)}';
+    } else {
+      window.addEventListener('keydown', function() {
+        if (opt !== 1) {
+          let spans = document.querySelectorAll('.curious_span span');
+          for (let i = 0; i < spans.length; i++) {
+            if (!spans[i].classList.contains('active')) {
+              spans[i].classList.add('active');
+		          spans[i].style.opacity = 1;
+            }
+          }
+        } else if (opt === 1) {
+          let spans = document.getElementsByClassName('curious_span');
+          setTimeout(function() {}, 1000);
+          for (let i = 0; i < spans.length; i++) {
+            for (let j = 0; j < spans[i].children.length; j++) {
+              spans[i].children[j].innerHTML =
+                regWordsRanomizer(spans[i].children[j].innerHTML);
+            }
+            spans[i].style.top = (15 + ~~(Math.random() * 75)) + 'vh';
+            spans[i].style.left = (10 + ~~(Math.random() * 80)) + 'vw';
+          }
         }
-    });
+      }, false);
+      css += '.curious_span {width: calc(' + num + 'vh + ' + num + '0px)}';
+  }
 
-    header.addEventListener('mouseenter', function() {
-      let spans = document.querySelectorAll('.header__name span');
-        for (let i = 0; i < spans.length; i++) {
-          spans[i].classList.remove('active');
-        }
-    });
+  if (opt === 1) {
+    let res = [[50, 45], [85, 5], [85, 75]];
+    let spans = document.getElementsByClassName('standart_let');
+      for (let i = 0; i < spans.length; i++) {
+        spans[i].style.top = res[i][0] + 'vh';
+        spans[i].style.left = res[i][1] + 'vw';
+      }
+  }
 
-    css += '.header__name {width: calc(' + num + 'vw + ' + num + '0px)}';
   let style = document.createElement('style');
     if (style.styleSheet) style.styleSheet.cssText = css;
     else style.appendChild( document.createTextNode(css) );
@@ -206,39 +223,72 @@ function cancelBlogDelete(blog_id) {
 
   button = document.getElementById('edit_blog');
     button.innerHTML = 'Изменить';
-    button.onclick = editBlog;
+    button.onclick = function() {
+      editBlog(blog_id);
+    };
 }
 
 
-// New source files for red color scheme
-function changeColorsForLogoAndMenut() {
-  if (!document.getElementsByClassName('red_scheme_body')[0]) {
-    document.getElementsByClassName('footer__logo')[0]
-                                    .src = '/static/images/article/logo.png';
-    document.getElementsByClassName('header__logo')[0]
-                                    .src = '/static/images/article/logo.png';
-    document.getElementById('menu-icon')
-                                    .src = '/static/images/article/menu.png';
-  } else {
-    document.getElementsByClassName('footer__logo')[0]
-                                    .src = '/static/images/logo.png';
-    document.getElementsByClassName('header__logo')[0]
-                                    .src = '/static/images/logo.png';
-    document.getElementById('menu-icon')
-                                    .src = '/static/images/menu.png';
+// Help function for lazy dynamic links
+function checkColorScheme() {
+  let scheme = "&scheme=day";
+  let checkbox = document.querySelector('.select_color_scheme input');
+    if (checkbox.checked) scheme = "&scheme=night";
+
+  return scheme;
+}
+
+
+// --deprecated--
+function checkHeader() {
+  let header = document.getElementsByClassName('header')[0];
+  let width = document.documentElement.offsetWidth;
+    console.log(width, header.getBoundingClientRect().right);
+  if (width > header.getBoundingClientRect().width) {
+    header.style.width = width + 'px';
   }
 }
 
 
-// Penult article visibility for start page
+// Switcher between article & blogs view for constructor
+function changeConstructorView() {
+  let article = document.getElementsByClassName('blog__article')[0];
+    article.classList.toggle('art_add');
+    article.children[2].classList.toggle('view_vis');
+
+  document.getElementsByClassName('content__painting')[0]
+    .classList.toggle('view_vis');
+  document.getElementsByClassName('view_inner')[0]
+    .classList.toggle('bord_bottom');
+  document.getElementsByClassName('view')[0]
+    .classList.toggle('view__globe');
+
+
+  let view = document.getElementsByClassName('view_button')[0];
+    if (view.innerHTML === '🌐') {
+      view.innerHTML = '💠';
+    } else {
+      view.innerHTML = '🌐';
+    }
+}
+
+
+// Penult article visibility for start page --optimized--
 function checkHideBlogVisibility() {
-  if (document.documentElement.offsetHeight >
-                        1.2 * document.documentElement.offsetWidth) {
-    document.getElementsByClassName('blog__article')[0]
-                                    .classList.remove('hide_blog');
+  let height = document.documentElement.offsetHeight;
+  let div = document.getElementsByClassName('main__images_block')[0];
+  let available = height - div.getBoundingClientRect().bottom - 70;
+  let articles = document.getElementsByClassName('blog__article');
+  if (height / available < 2) {
+    for (let i = 0; i < articles.length; i++) {
+      articles[i].style.maxHeight = (available / 2 - 50) + 'px';
+    }
+    articles[0].classList.remove('hide_blog');
   } else {
-    document.getElementsByClassName('blog__article')[0]
-                                    .classList.add('hide_blog');
+    for (let i = 0; i < articles.length; i++) {
+      articles[i].style.maxHeight = (available - 80) + 'px';
+    }
+    articles[0].classList.add('hide_blog');
   }
 }
 
@@ -264,6 +314,12 @@ function checkScrollBar() {
     }
     document.getElementsByClassName('footer')[0].classList.remove('footer_fixed');
   }
+}
+
+
+// Clears DELETED data base
+function clearBackup() {
+  document.location.href = "/easteregg/?action=cdb" + checkColorScheme();
 }
 
 
@@ -344,12 +400,6 @@ function confirmBlogDelete(blog_id) {
 }
 
 
-// New article link
-function createNewBlog() {
-  document.location.href = "/blog/?action=constructor";
-}
-
-
 // Login error message
 function createErrorMessage() {
   let p = document.createElement('p');
@@ -360,6 +410,49 @@ function createErrorMessage() {
 }
 
 
+// Help function -  creates letters and sets styles for it
+function createLettersForAnimation(name, num, styles, colors, h_name, css, opt) {
+  for (let i = 0; i < num; i++) {
+    let styleNow = styles[Math.floor(Math.random() * 4.99)];
+    let letter = document.createElement('span');
+      letter.textContent = name[i];
+      if (opt !== 1) {
+        letter.classList.add('letters_animation' + i);
+        css += '.letters_animation' + i + '.active {animation: ' + styleNow[0] +
+          (1 + Math.floor(Math.random() * 20) / 10) + styleNow[1] + '; color: ' +
+          colors[Math.floor(Math.random() * 19.99)] + ';} ' + '.letters_animation' +
+          i + ' {color: ' + colors[Math.floor(Math.random() * 19.99)] + ';}';
+
+
+        letter.addEventListener('animationend', () => {
+		      event.target.classList.remove('active');
+        });
+
+        setTimeout(() => {
+          letter.classList.add('active');
+        }, Math.floor(Math.random() * 3000));
+      } else {
+        letter.classList.add('active');
+      }
+      if (name[i] === ' ') { letter.innerHTML = '<pre> </pre>' }
+
+    h_name.appendChild(letter);
+  }
+  if (opt === 1) h_name.classList.add('standart_let');
+  return css;
+}
+
+
+// New article link
+function createNewBlog() {
+  document.getElementsByClassName('create_blog')[0]
+    .addEventListener('click', function () {
+        document.location.href = "/blog/?action=constructor"
+          + checkColorScheme();
+    });
+}
+
+
 // Theme selector option creator
 function createOption(index) {
   let options = ['all', 'Все', 'Учёба', 'Компьютер', 'Разное'];
@@ -367,7 +460,8 @@ function createOption(index) {
     option.innerHTML = options[index];
     option.addEventListener('click', function() {
       let theme = index === 1 ? options[0] : options[index];
-      document.location.href = "/blog/page/1?theme=" + theme;
+      document.location.href = "/blog/page/1?theme="
+        + theme + checkColorScheme();
     });
 
   return option;
@@ -387,7 +481,8 @@ function createPageSpan(num, current, typo, theme, author) {
     } else {
       span.title = 'Страница ' + num;
       span.onclick = function() {
-        document.location.href = "/blog/page/" + num + '?theme=' + theme + author;
+        document.location.href = "/blog/page/" + num + '?theme=' + theme
+          + author + checkColorScheme();
       };
     }
 
@@ -422,6 +517,25 @@ function createSelectOptions() {
 }
 
 
+// Help function for words animation
+  function createSpan(opt) {
+    let span = document.createElement('span');
+      span.className = 'curious_span';
+        span.style.top = (15 + ~~(Math.random() * 75)) + 'vh';
+        span.style.left = (10 + ~~(Math.random() * 80)) + 'vh';
+
+      window.addEventListener('keydown', function() {
+        span.style.top = (15 + ~~(Math.random() * 75)) + 'vh';
+        span.style.left = (10 + ~~(Math.random() * 80)) + 'vh';
+        if (opt === true) {
+          span.style.transform = "rotate(" + ~~(Math.random() * 359) + "deg)";
+        }
+      }, false);
+
+    return span;
+  }
+
+
 // Theme selector - creation init
 function createThemeSelector() {
   let custom_select = document.getElementsByClassName('select_theme')[0];
@@ -430,9 +544,39 @@ function createThemeSelector() {
 }
 
 
+// Function to create random word from alphabet
+function createWord(letters) {
+  let word = '';
+  let lang = letters[~~(Math.random() * 1.99)];
+  let length = 4 + ~~(Math.random() * 16.99);
+    for (i = 0; i < length; i++) {
+      word += lang[~~(Math.random() * lang.length - 0.01)];
+    }
+
+  length = ~~(Math.random() * 4.99);
+    if (word.length < 8) {
+      for (i = 0; i < length; i++) {
+        word += letters[2][~~(Math.random() * 9.99)];
+      }
+    }
+
+  return word;
+}
+
+
+// Create crazy animantion
+function deleteAllAnimations() {
+  let curious = document.getElementsByClassName('curious_span');
+    for (let i = curious.length - 1; i >= 0; i--) {
+      document.body.removeChild(curious[i]);
+    }
+}
+
+
 // Delete article link
 function deleteBlog(blog_id) {
-  document.location.href = "/blog/?action=delete&blog_id=" + blog_id;
+  document.location.href = "/blog/?action=delete&blog_id="
+    + blog_id + checkColorScheme();
 }
 
 
@@ -448,6 +592,22 @@ function fillCommentsContent(node, text) {
 }
 
 
+// Sets links on color scheme change
+function findAndReplaceLinks(scheme) {
+  let menu = document.querySelectorAll('.header__menu a');
+    for (let i = 0; i < menu.length; i++) {
+      menu[i].href = menu[i].href.slice(0, menu[i].href.indexOf('?scheme'))
+        + scheme;
+    }
+
+  let blog = document.querySelectorAll('.blog__link a');
+    for (let i = 0; i < blog.length; i++) {
+      blog[i].href = blog[i].href.slice(0, blog[i].href.indexOf('?scheme'))
+        + scheme;
+    }
+}
+
+
 // A help function to find rendering pages
 function findPagesToRender(count, current) {
   if (current === 1 || current === 2 || current ===  3) {
@@ -457,6 +617,13 @@ function findPagesToRender(count, current) {
   } else {
     return [1, -1, current-1, current, current+1, 0, count];
   }
+}
+
+
+// Fix view on current position
+function fixConstructorView() {
+  document.getElementsByClassName('view')[0].classList.toggle('view__fix');
+  document.getElementsByClassName('fix_button')[0].classList.toggle('fix_on');
 }
 
 
@@ -494,7 +661,42 @@ function preventDrag() {
 
 // Registration link with buffer
 function registerUser(path) {
-  document.location.href = "/register/?next=" + path;
+    document.getElementsByClassName('header__button')[0]
+      .addEventListener('click', function () {
+        document.location.href = "/register/?next="
+          + path + checkColorScheme();
+      });
+}
+
+
+// Alphabets for randomizer, initial random animation
+function regWordsRanomizer(flag=false) {
+  let letters = [
+    'aбвгдеёжзийклмнопрстуфхцчшщъыьэюя',
+    'abcdefghijklmnopqrstuvwxuz',
+    '1234567890'
+  ];
+  if (typeof flag === "string" && flag.length === 1) {
+    for (let i = 0; i < letters.length; i++) {
+      if (~letters[i].indexOf(flag)) {
+        return letters[i][~~(Math.random() * letters[i].length - .01)]
+      }
+    }
+  }
+
+  if (document.getElementsByClassName('curious_span')[0]) {
+    deleteAllAnimations();
+  }
+
+  if (flag === false) {
+    for (let i = 0; i < ~~(1 + Math.random() * 6.99); i++) {
+      animateName(createWord(letters), true);
+    }
+  } else if (flag === 1) {
+    for (let i = 0; i < 3; i++) {
+      animateName(createWord(letters), flag)
+    }
+  }
 }
 
 
@@ -506,27 +708,47 @@ function replaceBadSymbols(text) {
 
 
 // Article restoration link
-function restoreBlog(deleted_id) {
-  document.location.href = "/blog/?action=restore&deleted_id=" + deleted_id;
+function restoreBlog(deleted_id, scheme) {
+  document.location.href = "/blog/?action=restore&deleted_id="
+    + deleted_id + '&scheme=' + scheme;
 }
 
 
 // Set author query links
-function setAuthorLinks(theme) {
+function setAuthorLinks(theme, scheme) {
   let authors = document.querySelectorAll('.blog__author b');
     if (theme !== '') theme = 'theme=' + theme + '&';
     for (let i = 0; i < authors.length; i++) {
       authors[i].parentNode.onclick = function () {
-        document.location.href = "/blog/page/1?" + theme + "author=" +
-          authors[i].innerHTML;
+        if (document.getElementsByClassName('select_color_scheme')[0]) {
+          document.location.href = "/blog/page/1?" + theme + "author=" +
+            authors[i].innerHTML + checkColorScheme();
+        } else {
+          document.location.href = "/blog/page/1?" + theme + "author=" +
+            authors[i].innerHTML + '&scheme=' + scheme;
+        }
       }
     }
 }
 
 
+function setBlackMenuToNight() {
+  document.getElementsByClassName('header__menu_icon')[0]
+    .src = '/static/images/menu.png';
+
+  document.getElementsByClassName('header__logo')[0].src =
+    document.getElementsByClassName(('footer__logo'))[0].
+      src = '/static/images/logo.png';
+}
+
+
 // Color scheme selector checker
-function setColorSchemeSelector() {
+function setColorSchemeSelector(scheme) {
   let checkbox = document.querySelector('.select_color_scheme input');
+    if (scheme === 'night') {
+      checkbox.checked = true;
+    }
+
     if ("onpropertychange" in checkbox) {
       checkbox.onpropertychange = function () {
         if (event.propertyName === "checked") {
@@ -597,7 +819,8 @@ function setLink(node, author) {
     if (~node.textContent.indexOf('Учёба')) theme = 'Учёба';
     else if (~node.textContent.indexOf('Компьютер')) theme = 'Компьютер';
     else theme = 'Разное';
-    document.location.href = "/blog/page/1?theme=" + theme + author;
+    document.location.href = "/blog/page/1?theme=" + theme
+      + author + checkColorScheme();
   }
 }
 
@@ -675,52 +898,86 @@ function setThemeLinks(author) {
 
 
 // Theme option links setting
-function setThemeMainLinks() {
+function setThemeMainLinks(scheme) {
   let links = document.getElementsByClassName('img__block');
   links[0].addEventListener('click', function() {
-    document.location.href = "/blog/?theme=Учёба";
+    document.location.href = "/blog/?theme=Учёба"+ '&scheme=' + scheme;
   });
   links[1].addEventListener('click', function() {
-    document.location.href = "/blog/?theme=Компьютер";
+    document.location.href = "/blog/?theme=Компьютер" + '&scheme=' + scheme;
   });
   links[2].addEventListener('click', function() {
-    document.location.href = "/blog/?theme=Разное";
+    document.location.href = "/blog/?theme=Разное" + '&scheme=' + scheme;
   });
+}
+
+
+// Invisible menu fix for reg page
+function setWhiteMenu() {
+  document.getElementsByClassName('header__menu_icon')[0]
+        .src = '/static/images/article/menu.png';
 }
 
 
 // Developers info opener
 function toggleAbout(field) {
-  document.getElementsByClassName('developers_info')[field].classList.toggle('open');
+  document.getElementsByClassName('developers_info')[field]
+    .classList.toggle('open');
 }
 
 
-// Color scheme changer
+// Color scheme changer --optimized--
 function toggleColorScheme() {
-  changeColorsForLogoAndMenut();
-  document.getElementsByTagName('body')[0].classList.toggle('red_scheme_body');
-  document.getElementsByClassName('header')[0].classList.toggle('red_scheme_header');
-  document.getElementsByClassName('header__title')[0].classList.toggle('red_scheme_header_title');
-  document.getElementsByClassName('footer')[0].classList.toggle('red_scheme_footer');
-  document.getElementsByClassName('blog__article')[0].classList.toggle('red_scheme_border');
-  document.querySelector('.blog__article legend').id = 'article_legend';
-  document.querySelector('.blog__article legend').classList.toggle('red_scheme_legend');
-  if (document.getElementsByClassName('no_comments_yet')[0]) {
-    document.getElementsByClassName('no_comments_yet')[0].classList.toggle('red_scheme_no_com');
-  }
-  document.getElementsByClassName('header__switcher')[0].classList.toggle('red_scheme_login');
-
-  let data = document.getElementsByClassName('blog__data');
-    for (let i = 0; i < data.length; i++) {
-      data[i].classList.toggle('red_scheme_data');
+  let scheme;
+    if (document.body.classList.contains('red_scheme_body')) {
+      scheme = '?scheme=day';
+      document.body.classList.remove('red_scheme_body');
+      setColorSchemeImages(1);
+    } else {
+      scheme = '?scheme=night';
+      document.body.classList.add('red_scheme_body');
+      setColorSchemeImages(0);
     }
+
+  findAndReplaceLinks(scheme);
+}
+
+
+// Sets new sources for images if color scheme's change is occured
+function setColorSchemeImages(colorSet) {
+
+  if (colorSet) {
+    document.getElementsByClassName('header__logo')[0].src =
+      document.getElementsByClassName('footer__logo')
+        .src ='/static/images/logo.png';
+    document.getElementsByClassName('header__menu_icon')[0]
+      .src = '/static/images/menu.png';
+
+      if (document.getElementsByClassName('content__painting')[0]) {
+        document.getElementsByClassName('content__painting')[0]
+          .src = '/static/images/blog/background.png'
+      }
+  } else {
+    document.getElementsByClassName('header__logo')[0].src =
+      document.getElementsByClassName('footer__logo')
+        .src = '/static/images/article/logo.png';
+    document.getElementsByClassName('header__menu_icon')[0]
+      .src = '/static/images/article/menu.png';
+
+      if (document.getElementsByClassName('content__painting')[0]) {
+        document.getElementsByClassName('content__painting')[0]
+          .src = '/static/images/blog/background1.png'
+      }
+  }
 }
 
 
 // Disclaimer & d_opener toggle
 function toggleDisclaimer() {
-  document.getElementsByClassName('content__disclaimer')[0].classList.toggle('open');
-  document.getElementsByClassName('d__opener')[0].classList.toggle('open');
+  document.getElementsByClassName('content__disclaimer')[0].
+  classList.toggle('open');
+  document.getElementsByClassName('d__opener')[0]
+    .classList.toggle('open');
 }
 
 
@@ -740,12 +997,9 @@ function toggleMenu() {
 
 // Logout link
 function userLogOut() {
-  document.location.href = "/blog/?action=logout";
+  document.location.href = "/blog/?action=logout" + checkColorScheme();
 }
 
 
 // Edit article link
-function editBlog() {}
-function clearBackup() {
-  document.location.href = "/easteregg/?action=cdb";
-}
+function editBlog(blog_id) {}

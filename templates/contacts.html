@@ -20,11 +20,16 @@
   <img class="content__menu" src="{% static 'images/contacts/menu.png' %}">
   <img class="content__logo_me" src="{% static 'images/logo_me.png' %}">
 
-  <span class="menu_li li_1"><a href="../" title="Главная страница">🏠</a></span>
-  <span class="menu_li li_2"><a href="../blog/" title="Блог">📜</a></span>
-  <span class="menu_li li_3"><a href="../about/" title="Обо мне">🕵</a></span>
-  <span class="menu_li li_4"><a href="../resume/" title="Резюме">💼</a></span>
-  <span class="menu_li li_5"><a href="../easteregg/" title="Разработчики">🔧</a></span>
+  <span class="menu_li li_1">
+    <a href="../?scheme={{ scheme }}" title="Главная страница">🏠</a></span>
+  <span class="menu_li li_2">
+    <a href="../blog/?scheme={{ scheme }}" title="Блог">📜</a></span>
+  <span class="menu_li li_3">
+    <a href="../about/?scheme={{ scheme }}" title="Обо мне">🕵</a></span>
+  <span class="menu_li li_4">
+    <a href="../resume/?scheme={{ scheme }}" title="Резюме">💼</a></span>
+  <span class="menu_li li_5">
+    <a href="../easteregg/?scheme={{ scheme }}" title="Разработчики">🔧</a></span>
 
   <div class="show_info me">
     <img class="info__logo" src="{% static 'images/logo_me.png' %}"

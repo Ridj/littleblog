@@ -4,10 +4,8 @@ body {
   overflow-x: hidden;
 }
 
-.deep_h {
-  opacity: .1;
-}
 
+/* CONTENT STYLES */
 button {
   position: fixed;
   top: 13vh;
@@ -17,4 +15,32 @@ button {
   background: linear-gradient(black, lightslategray);
   font-size: 2vh;
   color: rgba(230, 230, 250, .8);
+  cursor: pointer;
+}
+
+
+/* NIGHT SCHEME */
+.red_scheme_body .footer {
+  border-top: .33vh solid rgba(134, 34, 34, 0.44);
+  background: linear-gradient(to left bottom, rgba(0, 0, 0, 0.1),
+  rgba(178, 34, 34, 0.13));
+}
+
+.red_scheme_body .footer__link:before {
+  text-shadow: lavender 0 0 0.1vh,
+               darkgrey 0 0 0.1vh,
+               darkgrey 0 0 0.1vh,
+               lavender 0.07vh 0.07vh 0.07vh,
+               darkgrey 0.3vh 0.2vh 0.2vh;;
+  color: black;
+}
+
+.red_scheme_body .footer__logo, .red_scheme_body .header__logo {
+  opacity: .4;
+}
+
+
+/* ACTIVE STYLES*/
+.deep_h {
+  opacity: .1;
 }
