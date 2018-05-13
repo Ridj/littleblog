@@ -7,6 +7,7 @@
 
   // Theme selector listener
   closeSelectorOnLeaveMouse();
+  setTimeout(checkMobilesWidth, 15);
 
   // "Create article" button fix for Edge/IE
   let userAgent = navigator.userAgent;

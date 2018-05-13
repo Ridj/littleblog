@@ -1,6 +1,7 @@
 (function() {
   // Disclaimer listener
   addDisclaimerListeners();
+  setBlackMenuToNight();
 
   // Footer opacity listener
   setTimeout(function() {

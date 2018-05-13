@@ -5,7 +5,7 @@
   // Penult article's visibility test
   checkHideBlogVisibility();
   window.addEventListener('resize', function() {
-    setTimeout(checkHideBlogVisibility, 1);
+    setTimeout(checkHideBlogVisibility, 500);
   }, false);
 
   // Footer opacity listener

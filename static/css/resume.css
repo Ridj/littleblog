@@ -1,11 +1,10 @@
 /* DOCUMENT STYLES*/
-body {
+body, .header, .footer, .content {
   overflow: hidden;
 }
 
 /* HEADER STYLES */
 .header {
-  width: 100%;
   background: linear-gradient(to left bottom,
     rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.5));
 }

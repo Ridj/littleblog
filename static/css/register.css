@@ -99,6 +99,47 @@ input[type="submit"] {
               0 0 1px 45px rgba(14, 255, 35, 0.05);
 }
 
+/* crazy letters */
+.curious_span {
+  position: absolute;
+  display: inline-block;
+  font-size: 1.5vh;
+
+  -webkit-transition: 1s;
+  -moz-transition: 1s;
+  -o-transition: 1s;
+  transition: 1s;
+}
+.standart_let {
+  text-align: center;
+  padding: .5vw;
+  background: radial-gradient(ellipse, rgba(1, 32, 9, 0.6), transparent);
+  border-radius: 50px;
+  font-size: 1.1vw;
+  font-family: cursive;
+  color: azure;
+  font-weight: bold;
+  opacity: .4;
+  text-shadow: black 0.07vh 0.07vh 0.07vh, grey 0.3vh 0.2vh 0.2vh,
+    0 3px 2px rgba(0, 0, 0, 0.38),
+    3px 5px 5px rgba(104, 4, 42, 0.35),
+    0 0 1px black;
+}
+
+.curious_span span {
+  display: inline-block;
+  opacity: .0;
+  letter-spacing: calc(.4vw + 4px);
+  animation: infinite;
+  -webkit-transition: 1s;
+  -moz-transition: 1s;
+  -o-transition: 1s;
+  transition: 1s;
+}
+.curious_span span.active {
+  opacity: 1;
+}
+
 
 /* FOOTER STYLES */
  body:not(.red_scheme_body) .footer {
@@ -140,6 +181,11 @@ input[type="submit"] {
   box-shadow: 0 0 1px 15px rgba(138, 59, 88, 0.15),
               0 0 1px 30px rgba(138, 59, 88, 0.1),
               0 0 1px 45px rgba(138, 59, 88, 0.1);
+}
+
+.red_scheme_body .standart_let {
+  background: radial-gradient(ellipse, rgba(32, 2, 17, 0.6), transparent);
+
 }
 
 

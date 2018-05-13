@@ -4,8 +4,7 @@
 
   // Invisible menu fix
   setWhiteMenu();
-
-  regWordsRanomizer(1);
+  regWordsRanomizer();
 
   // Button's margin bug fix for Edge/IE
   let userAgent = navigator.userAgent;

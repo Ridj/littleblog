@@ -5,15 +5,15 @@ from django.contrib.auth.models import User
 
 # --on progress--
 class ArticleForm(forms.Form):
-    theme = ...
-    name = forms.CharField(label='Название',
-                           initial='Блог без названия',
-                           min_length=3,
-                           max_length=30,
-                           widget=forms.TextInput(attrs={
-                               'class': 'article__form_name'
-                           }))
-    content = forms.CharField()
+    author = forms.CharField(initial='Неизвестный',
+                             min_length=4,
+                             max_length=20)
+    content = forms.CharField(initial='Базовый контент')
+    content_add = forms.CharField(initial=' ')
+    name = forms.CharField(initial='Новый блог',
+                           max_length=30)
+    theme =forms.ChoiceField(choices=((1, "Учёба"), (2, "Компьютер"), (3, "Разное")),
+                             initial=3)
 
 
 class CommentForm(forms.Form):

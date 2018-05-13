@@ -22,9 +22,16 @@ class Deleted(models.Model):
     name = models.CharField(max_length=30)
     theme = models.CharField(max_length=20)
 
+    content_add = models.TextField()
+
 
 class Comment(models.Model):
     article = models.ForeignKey(Blog, on_delete=models.CASCADE)
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=30, default='Аноним')
+
+
+class AddContent(models.Model):
+    article = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    content_add = models.TextField()

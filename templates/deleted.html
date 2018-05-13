@@ -11,11 +11,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/deleted.css' %}">
 {% endblock style %}
 
-{% block addheader %}
-  <button class="anime_go" onclick="regWordsRanomizer()">Go!</button>
-  <button class="anime_stop" onclick="deleteAllAnimations()">Off</button>
-{% endblock addheader %}
-
 
 {% block content %}
   <p>Блог <b>"{{ deleted_name }}"</b> успешно удалён.

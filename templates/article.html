@@ -138,7 +138,8 @@
 {% block script_builder %}
 
   <script>
-    fillBlogContent('content{{ blog.id }}', '{{ blog.content }}');
+    fillBlogContent('content{{ blog.id }}',
+      '{{ blog.content }}' + '{{ blog_add.content_add }}');
 
     // Color scheme selector
     setColorSchemeSelector('{{ scheme }}');

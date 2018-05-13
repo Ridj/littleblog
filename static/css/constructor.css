@@ -1,4 +1,11 @@
+/* DOCUMENT STYLES */
 body {
+  overflow: hidden;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -6,11 +13,24 @@ body {
   display: none;
 }
 
+/* CONTENT STYLES*/
+/* common elements */
 #menu-icon {
   display: block;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 20;
+}
+
+.header__menu {
+  top: 0;
+}
+
+.select_color_scheme {
+  position: absolute;
+  top: 1vw;
+  left: 91.25vw;
   z-index: 20;
 }
 
@@ -24,6 +44,84 @@ body {
   transition: 1s;
 }
 
+/* help disclaimer */
+.constructor__disclaimer {
+  position: absolute;
+  top: 17.5vh;
+  left: 20vw;
+  width: 60vw;
+}
+
+.constructor__arrow {
+  display: inline-block;
+  position: absolute;
+  color: blue;
+  font-size: 2vh;
+}
+
+.up_ar {
+  left: 49%;
+}
+.left_ar {
+  top: 49%;
+  left: 0;
+}
+.right_ar {
+  top: 49%;
+  right: 0;
+}
+.down_ar {
+  bottom: 0;
+  left: 49%;
+}
+
+.constructor__disclaimer_help {
+  display: inline-block;
+  position: relative;
+  padding: 1%;
+  border: 2px solid black;
+}
+
+.constructor__disclaimer_help b {
+  display: block;
+  text-align: center;
+}
+
+.up_help, .down_help {
+  left: 15%;
+  width: 70%;
+  margin-top: 4vh;
+}
+
+.down_help {
+  margin-top: 2vh;
+  margin-bottom: 3vh;
+}
+
+.left_help, .right_help {
+  float: left;
+  width: 40%;
+  margin-top: 2vh;
+  margin-left: 3vh;
+}
+
+.right_help {
+  float: right;
+  margin-right: 3vh;
+}
+
+.constructor__disclaimer_closer {
+  position: absolute;
+  top: 1vh;
+  right: 1vh;
+  font-size: 4vh;
+  color: red;
+  cursor: pointer;
+  z-index: 10;
+}
+
+
+/* EDITOR */
 .editor {
   z-index: 5;
   background: rgba(255, 255, 255, .2);
@@ -43,9 +141,12 @@ body {
   width: 70vw;
 }
 
+
+/* VIEW */
 .view {
   z-index: 6;
-  background: radial-gradient(circle closest-corner at 30vw 20vh , #FAECD5, lightcyan) fixed;
+  background: radial-gradient(circle closest-corner at 30vw 20vh ,
+    #FAECD5, lightcyan) fixed;
   height: 85vh;
   top: -70vh;
   margin-left: 10vw;
@@ -163,6 +264,12 @@ body {
               0 0 1px 15px rgba(36, 177, 254, 0.05);
 }
 
+.view_vis {
+  display: none;
+}
+
+
+/* DRAGGABLE */
 .draggable {
   z-index: 7;
   background: rgba(0, 128, 0, .4);
@@ -189,6 +296,22 @@ body {
   right: -2vw;
 }
 
-.view_vis {
-  display: none;
+
+/* NIGHT SCHEME */
+.red_scheme_body .view {
+  background: radial-gradient(circle closest-corner at 70vw 65vh,
+    rgba(106, 5, 24, 0.62), rgba(8, 1, 5, 0.89)) fixed;
+}
+
+
+/* ADAPTIVE STYLES */
+@media screen and (max-width: 615px) {
+  #menu-icon {
+    top: 10vh;
+    transform: scale(.9);
+  }
+  .select_color_scheme {
+    top: calc(5vw + 10vh);
+    transform: rotate(90deg) scale(1.1);
+  }
 }

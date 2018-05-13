@@ -143,18 +143,11 @@ function animateName(name, opt=false) {
 
       css += '.header__name {width: calc(' + num + 'vw + ' + num + '0px)}';
     } else {
-      window.addEventListener('keydown', function() {
-        if (opt !== 1) {
-          let spans = document.querySelectorAll('.curious_span span');
-          for (let i = 0; i < spans.length; i++) {
-            if (!spans[i].classList.contains('active')) {
-              spans[i].classList.add('active');
-		          spans[i].style.opacity = 1;
-            }
-          }
-        } else if (opt === 1) {
+      if (opt === 1) {
+        window.addEventListener('keydown', function () {
           let spans = document.getElementsByClassName('curious_span');
-          setTimeout(function() {}, 1000);
+          setTimeout(function () {
+          }, 1000);
           for (let i = 0; i < spans.length; i++) {
             for (let j = 0; j < spans[i].children.length; j++) {
               spans[i].children[j].innerHTML =
@@ -163,13 +156,24 @@ function animateName(name, opt=false) {
             spans[i].style.top = (15 + ~~(Math.random() * 75)) + 'vh';
             spans[i].style.left = (10 + ~~(Math.random() * 80)) + 'vw';
           }
-        }
-      }, false);
-      css += '.curious_span {width: calc(' + num + 'vh + ' + num + '0px)}';
-  }
+        }, false);
+        css += '.curious_span {width: calc(' + num + 'vw + ' + num + '0px)}';
+      } else {
+        h_name.addEventListener('mouseenter', function () {
+          let spans = document.querySelectorAll('.curious_span span');
+          for (let i = 0; i < spans.length; i++) {
+            if (!spans[i].classList.contains('active')) {
+              spans[i].classList.add('active');
+              spans[i].style.opacity = 1;
+            }
+          }
+        });
+        css += '.curious_span {width: calc(' + ~~(num/2.5) + 'vw + ' + ~~(num/3) + '0px)}';
+      }
+    }
 
   if (opt === 1) {
-    let res = [[50, 45], [85, 5], [85, 75]];
+    let res = [[50, 45], [85, 5], [85, 75], [35, 75], [35, 5]];
     let spans = document.getElementsByClassName('standart_let');
       for (let i = 0; i < spans.length; i++) {
         spans[i].style.top = res[i][0] + 'vh';
@@ -279,6 +283,7 @@ function checkHideBlogVisibility() {
   let div = document.getElementsByClassName('main__images_block')[0];
   let available = height - div.getBoundingClientRect().bottom - 70;
   let articles = document.getElementsByClassName('blog__article');
+    console.log(height,  available);
   if (height / available < 2) {
     for (let i = 0; i < articles.length; i++) {
       articles[i].style.maxHeight = (available / 2 - 50) + 'px';
@@ -286,7 +291,7 @@ function checkHideBlogVisibility() {
     articles[0].classList.remove('hide_blog');
   } else {
     for (let i = 0; i < articles.length; i++) {
-      articles[i].style.maxHeight = (available - 80) + 'px';
+      articles[i].style.maxHeight = '33vh';
     }
     articles[0].classList.add('hide_blog');
   }
@@ -313,6 +318,17 @@ function checkScrollBar() {
                                                   .width = 'calc(100vw - 12px)';
     }
     document.getElementsByClassName('footer')[0].classList.remove('footer_fixed');
+  }
+}
+
+function checkMobilesWidth() {
+  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+    .test(navigator.userAgent)) {
+      document.getElementsByClassName('content__painting')[0].style
+                                                  .width = '100vw';
+      document.getElementsByClassName('content')[0].style
+                                                  .width = '100vw';
+      document.body.style.width = '100vw';
   }
 }
 
@@ -416,14 +432,22 @@ function createLettersForAnimation(name, num, styles, colors, h_name, css, opt) 
     let styleNow = styles[Math.floor(Math.random() * 4.99)];
     let letter = document.createElement('span');
       letter.textContent = name[i];
-      if (opt !== 1) {
+      if (opt !== 1 || Math.random() >.5) {
         letter.classList.add('letters_animation' + i);
         css += '.letters_animation' + i + '.active {animation: ' + styleNow[0] +
           (1 + Math.floor(Math.random() * 20) / 10) + styleNow[1] + '; color: ' +
           colors[Math.floor(Math.random() * 19.99)] + ';} ' + '.letters_animation' +
           i + ' {color: ' + colors[Math.floor(Math.random() * 19.99)] + ';}';
 
+        if (opt === 1) {
+          letter.addEventListener('animationend', () => {
+            event.target.classList.remove('active');
+            setTimeout(() => {
+              letter.classList.add('active');
+            }, Math.floor(Math.random() * 3000));
+        });
 
+        }
         letter.addEventListener('animationend', () => {
 		      event.target.classList.remove('active');
         });
@@ -432,7 +456,7 @@ function createLettersForAnimation(name, num, styles, colors, h_name, css, opt) 
           letter.classList.add('active');
         }, Math.floor(Math.random() * 3000));
       } else {
-        letter.classList.add('active');
+        letter.classList.add('active')
       }
       if (name[i] === ' ') { letter.innerHTML = '<pre> </pre>' }
 
@@ -521,16 +545,26 @@ function createSelectOptions() {
   function createSpan(opt) {
     let span = document.createElement('span');
       span.className = 'curious_span';
-        span.style.top = (15 + ~~(Math.random() * 75)) + 'vh';
-        span.style.left = (10 + ~~(Math.random() * 80)) + 'vh';
+        span.style.top = (25 + ~~(Math.random() * 60)) + 'vh';
+        span.style.left = (5 + ~~(Math.random() * 70)) + 'vw';
 
-      window.addEventListener('keydown', function() {
-        span.style.top = (15 + ~~(Math.random() * 75)) + 'vh';
-        span.style.left = (10 + ~~(Math.random() * 80)) + 'vh';
-        if (opt === true) {
-          span.style.transform = "rotate(" + ~~(Math.random() * 359) + "deg)";
+      span.addEventListener('mouseenter', (function() {
+        if (opt === 1) {
+          if (parseInt(getComputedStyle(span).top) >
+            document.documentElement.offsetHeight / 1.5) {
+            span.style.left = ~~(Math.random() * 70) + 'vw';
+          } else {
+            span.style.top = (25 + ~~(Math.random() * 60)) + 'vh';
+          }
+          span.style.transform = "scale(" + (1 + (100 - ~~(Math.random() * 150))/100) + ")";
+        } else {
+          span.style.left = ~~(Math.random() * 90) + 'vw';
+          span.style.top = (5 + ~~(Math.random() * 80)) + 'vh';
+          span.style.transform = "scale(" + (1 + (150 - ~~(Math.random() * 200))/100) +
+            ") rotate(" + ~~(Math.random() * 360) + "deg)";
         }
-      }, false);
+
+      }).bind(this), false);
 
     return span;
   }
@@ -548,7 +582,7 @@ function createThemeSelector() {
 function createWord(letters) {
   let word = '';
   let lang = letters[~~(Math.random() * 1.99)];
-  let length = 4 + ~~(Math.random() * 16.99);
+  let length = 4 + ~~(Math.random() * 10.99);
     for (i = 0; i < length; i++) {
       word += lang[~~(Math.random() * lang.length - 0.01)];
     }
@@ -684,16 +718,12 @@ function regWordsRanomizer(flag=false) {
     }
   }
 
-  if (document.getElementsByClassName('curious_span')[0]) {
-    deleteAllAnimations();
-  }
-
   if (flag === false) {
     for (let i = 0; i < ~~(1 + Math.random() * 6.99); i++) {
       animateName(createWord(letters), true);
     }
   } else if (flag === 1) {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < ~~(2 + Math.random() * 3.99); i++) {
       animateName(createWord(letters), flag)
     }
   }

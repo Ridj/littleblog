@@ -9,38 +9,6 @@ body {
   border-bottom: .25vw solid rgba(0, 0, 0, .6);
 }
 
-/* crazy buttonx */
-.header button {
-  position: absolute;
-  top: 1vh;
-  padding: 1vh;
-  margin-top: .5vh;
-  border-radius: 50%;
-  cursor: pointer;
-  border-color: rgba(0, 0, 0, 0.32);
-  font-size: 2vh;
-  outline: none;
-}
-.header button:hover {
-  transform: scale(1.05);
-  box-shadow: gray 0.07vh 0.07vh 0.07vh,
-  black 0.05vh 0.1vh .5vh;;
-}
-
-.anime_go {
-  left: calc(80vw - 64px);
-  background: linear-gradient(to left bottom, rgba(84, 99, 175, 0.59), darkcyan);
-  color: #fcfcfc;
-  text-shadow: 0 0 3px lavender;
-}
-
-.anime_stop {
-  left: calc(90vw - 64px);
-  background: linear-gradient(to left bottom, rgba(175, 9, 35, 0.59), #8b091b);
-  color: #fcfcfc;
-  text-shadow: 0 0 3px lavender;
-}
-
 
 /* CONTENT STYLES*/
 /* warning */
@@ -91,6 +59,20 @@ p span {
   animation: scaleon2 2s linear infinite;
 }
 
+/* crazy letters */
+.curious_span {
+  font-family: cursive;
+  padding: 3.5vh 0;
+  font-size: 1.5vw;
+  background: radial-gradient(ellipse, rgba(144, 144, 144, 0.05), transparent);
+  color: azure;
+  opacity: .6;
+  text-shadow: black 0.07vh 0.07vh 0.07vh, grey 0.3vh 0.2vh 0.2vh,
+    0 3px 2px rgba(0, 0, 0, 0.38),
+    3px 5px 5px rgba(104, 4, 42, 0.35),
+    0 0 1px black;
+}
+
 
 /* restore button */
 input[type="submit"] {
@@ -124,39 +106,6 @@ input[type="submit"] {
   -moz-animation: scaleon 1s linear infinite;
   -o-animation: scaleon 1s linear infinite;
   animation: scaleon 1s linear infinite;
-}
-
-/* crazy letters */
-.curious_span {
-  position: absolute;
-  display: inline-block;
-  font-size: 1.5vh;
-
-  -webkit-transition: 1s;
-  -moz-transition: 1s;
-  -o-transition: 1s;
-  transition: 1s;
-}
-.standart_let {
-  text-align: center;
-  padding: .5vh;
-  background: linear-gradient(to left bottom, rgba(0, 0, 0, 0.8),
-              gray);
-  border: 3px dotted black;
-  color: lavender;
-  text-shadow: 1px 1px 3px lavender, 0 0 4px gray;
-}
-
-.curious_span span {
-  display: none;
-  letter-spacing: calc(.4vw + 4px);
-  -webkit-transition: 1s;
-  -moz-transition: 1s;
-  -o-transition: 1s;
-  transition: 1s;
-}
-.curious_span span.active {
-  display: inline-block;
 }
 
 

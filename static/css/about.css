@@ -5,6 +5,14 @@ body {
   overflow-x: hidden;
 }
 
+.header, .footer, .content {
+  overflow-x: hidden;
+}
+
+.footer {
+  overflow-y: hidden;
+}
+
 
 /* HEADER STYLES */
 .header__switcher {
@@ -97,8 +105,8 @@ body {
   background: rgba(255, 255, 255, 0.5);
   font-weight: bold;
 
-  -webkit-transition: .5s; -moz-transition: .5s;
-  -o-transition: .5s; transition: .5s;
+  -webkit-transition: 1s; -moz-transition: 1s;
+  -o-transition: 1s; transition: 1s;
 }
 .content__text:hover {
   background: rgba(255, 255, 255, 0.85);
@@ -211,6 +219,10 @@ body {
 
 
 /* NIGHT SCHEME */
+.red_scheme_body .header__menu_icon {
+  opacity: .8;
+}
+
 .red_scheme_body .header__title {
   text-shadow: #832720 0 0 .1vh,
     #3f3f3f 0 0 .1vh,

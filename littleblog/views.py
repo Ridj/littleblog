@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from .models import *
 from math import ceil
-from .forms import CommentForm, UserForm
+from .forms import ArticleForm, CommentForm, UserForm
 
 
 def article(request, blog_id):
@@ -158,11 +158,13 @@ def get_article(request, b_id):
 
     try:
         current_blog = Blog.objects.get(id=b_id)
+        blog_add = AddContent.objects.get(article_id=b_id)
         comments = Comment.objects.filter(article_id=b_id)
         comments_form = CommentForm()
 
         return render(request, 'article.html', context={
-            'blog': current_blog,       # Article
+            'blog': current_blog,       # Article base
+            'blog_add': blog_add,       # Full content
             'comments': comments,
             'com_form': comments_form,
             'logerror': logerror,        # Login failed flag
@@ -210,6 +212,8 @@ def get_delete_blog(request):
     if blog_to_del.author == username:
         # Article deletion & backup
         backup = record_to_db(Deleted(), blog_to_del, False)
+        if backup is False:
+            return render(request, 'error.html')
         blog_to_del.delete()
 
         return render(request, 'deleted.html', context={
@@ -245,6 +249,8 @@ def get_restore_blog(request):
     if blog_restore.author == username:
         # Article restoration & delete from Deleted
         restored = record_to_db(Blog(), blog_restore, False)
+        if restored is False:
+            return render(request, 'error.html')
         blog_restore.delete()
 
         return HttpResponseRedirect('/blog/post/' + str(restored.id) +
@@ -356,6 +362,8 @@ def record_to_db(model, from_blog, request):
     :return: Blog or Deleted object
     """
 
+    flag_is = True  # a help flag to differ models
+
     if request is False:
         # Backup & restoration
         model.author = from_blog.author
@@ -367,20 +375,36 @@ def record_to_db(model, from_blog, request):
             # Restoration option
             model.modified = from_blog.deleted
         except AttributeError:
-            pass
+            try:
+                # Delete option
+                model.content_add = AddContent.objects.\
+                    get(article_id=from_blog.id).content_add
+                flag_is = False
+            except AttributeError or AddContent.DoesNotExist:
+                return False
     else:
         # Create new article
 
         # --on progress-- model = Article_form(request.POST)
         #                 if article.is_valid():
         #                   model = Blog()
-
-        model.author = request.GET.get("author")
-        model.theme = request.GET.get("theme")
-        model.name = request.GET.get("name")
-        model.content = request.GET.get("content")
+        model = ArticleForm(request.POST)
+        if model.is_valid():
+            model = Blog()
+            model.author = request.GET.get("author")
+            model.content = request.GET.get("content")
+            model.name = request.GET.get("name")
+            model.theme = request.GET.get("theme")
 
     model.save()
+    if flag_is:
+        content = AddContent()
+        content.article = model
+        if request is False:
+            content.content_add = from_blog.content_add
+        else:
+            content.content_add = request.GET.get('content_add')
+        content.save()
     return model
 
 
