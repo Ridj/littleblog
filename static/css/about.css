@@ -219,8 +219,8 @@ body {
 
 
 /* NIGHT SCHEME */
-.red_scheme_body .header__menu_icon {
-  opacity: .8;
+.red_scheme_body .menu_h {
+  background: #626262;
 }
 
 .red_scheme_body .header__title {

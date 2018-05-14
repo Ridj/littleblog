@@ -24,6 +24,7 @@
   <div class="header">
   {% block header %}
 
+    <!--
     <img id="menu-icon" class="header__menu_icon"
             {% if scheme == 'night' %}
          src="{% static 'images/article/menu.png' %}"
@@ -31,6 +32,11 @@
          src="{% static 'images/menu.png' %}"
             {% endif %}
          onclick="toggleMenu()" alt="menu">
+         -->
+    <a class="header__menu_icon" onclick="toggleMenu()">
+      <span class="menu_h h1"></span><span class="menu_h h2"></span>
+      <span class="menu_h h3"></span><span class="menu_h h4"></span>
+    </a>
 
     <h1 class="header__title">
       {% block header_title %}{% endblock header_title %}

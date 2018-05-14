@@ -15,13 +15,22 @@ def article(request, blog_id):
     """
     if request.method == 'POST':
         if request.POST.get('password1', "") == "":
-            # User adds commentary to article
-            return post_comment(request, blog_id)
+            if request.POST.get('author', "") == "":
+                # User adds commentary to article
+                return post_comment(request, blog_id)
+            else:
+                # User edits own article
+                edited_blog = record_to_db(Blog(), blog_id, request)
+                if edited_blog is False:
+                    return render(request, 'error.html', context={
+                                    'id': blog_id,
+                                    'type': 'edit'
+                            })
 
     action = request.GET.get("action", "")
     if action == 'constructor':
-        # Constructor: edit article (author)
-        ...
+        return get_constructor(request, blog_id)
+
     return get_article(request, blog_id)
 
 
@@ -34,6 +43,15 @@ def blog(request, page=1):
     """
     # Authentication & getting error message if occured
     logerror = loghelper(request)
+
+    # New article creation
+    if request.method == 'POST' and request.POST.get('author', "") != "":
+        new_blog = record_to_db(Blog(), False, request)
+        if new_blog is False:
+            return render(request, 'error.html', context={
+                    'type': 'creation'
+            })
+        return get_article(request, new_blog.id)
 
     # Special actions: constructor (create article), delete & restore article
     action = request.GET.get("action", "")
@@ -74,6 +92,9 @@ def easteregg(request):
         username = request.user.get_username()
         if username == 'Kato':
             clear_backup_db()
+    elif action == 'cbbn':
+        blogs_to_del = query_blogs(request)
+        blogs_to_del[0].delete()
     # --on progress-- Developer's notes
     return render(request, 'easter.html', context={"scheme": scheme})
 
@@ -179,11 +200,39 @@ def get_article(request, b_id):
         })
 
 
-def get_constructor(request):
+def get_constructor(request, blog_id=False):
     # Authentication check for constructor
     scheme = request.GET.get('scheme', "")
     if request.user.is_authenticated:
+        constructor_form = ArticleForm()
+
+        if blog_id:
+            try:
+                current_blog = Blog.objects.get(id=blog_id)
+                blog_add = AddContent.objects.get(article_id=blog_id)
+
+                if current_blog.author != request.user.get_username():
+                    return render(request, 'error.html', context={
+                        'type': 'permission'
+                    })
+
+                return render(request, 'constructor.html', context={
+                    'art_form': constructor_form,
+                    'blog': current_blog,
+                    'blog_add': blog_add,
+                    'scheme': scheme,
+                    'type': 'edit'
+                })
+
+            except Blog.DoesNotExist:
+                # Invalid article id error
+                return render(request, 'error.html', context={
+                    'id': blog_id,
+                    'type': 'blog'
+                })
+
         return render(request, 'constructor.html', context={
+            'art_form': constructor_form,
             'scheme': scheme,
             'type': 'new'
         })
@@ -357,9 +406,9 @@ def record_to_db(model, from_blog, request):
     """
     Records article to database
     :param model: Blog OR Deleted (backup)
-    :param from_blog: (optional) object to copy - used for backup & restoration
-    :param request: (optional) author, content, name, theme
-    :return: Blog or Deleted object
+    :param from_blog: object(backup & restore) or blog_id(edit) or False(new)
+    :param request: edit/new(author, content, name, theme) or False(b&r)
+    :return: Blog or Deleted object or False(error occurred)
     """
 
     flag_is = True  # a help flag to differ models
@@ -383,27 +432,54 @@ def record_to_db(model, from_blog, request):
             except AttributeError or AddContent.DoesNotExist:
                 return False
     else:
-        # Create new article
-
-        # --on progress-- model = Article_form(request.POST)
-        #                 if article.is_valid():
-        #                   model = Blog()
         model = ArticleForm(request.POST)
         if model.is_valid():
-            model = Blog()
-            model.author = request.GET.get("author")
-            model.content = request.GET.get("content")
-            model.name = request.GET.get("name")
-            model.theme = request.GET.get("theme")
+            if from_blog is False:
+                # Create new article
+                model = Blog()
+                model.author = request.POST.get("author")
+            else:
+                # Edit existing article
+                try:
+                    model = Blog.objects.get(id=from_blog)
+                    if model.author != request.POST.get("author") or \
+                       model.author != request.user.get_username():
+                        return False
+                except Blog.DoesNotExist:
+                    return False
+            model.content = request.POST.get("content")
+            model.name = request.POST.get("name")
+            theme = request.POST.get("theme")
+            if theme == 'Учёба' or theme == 'Компьютер':
+                model.theme = theme
+            else:
+                model.theme = 'Разное'
+        else:
+            return False
 
-    model.save()
+    if from_blog is False or request is False:
+        model.save()    # New article or restoration or deletion
+    else:
+        model.save(update_fields=['content', 'name', 'theme'])  # Edit article
+
     if flag_is:
-        content = AddContent()
-        content.article = model
+        if from_blog is False or request is False:
+            content = AddContent()  # New article or restoration
+            content.article = model
+        else:
+            # Edit article
+            try:
+                content = AddContent.objects.get(article_id=model.id)
+            except AddContent.DoesNotExist:
+                return False
         if request is False:
             content.content_add = from_blog.content_add
         else:
-            content.content_add = request.GET.get('content_add')
+            content.content_add = request.POST.get('content_add')
+            if from_blog:
+                # Edit article
+                content.save(update_fields=['content_add'])
+                return model
         content.save()
     return model
 

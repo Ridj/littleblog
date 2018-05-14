@@ -2,8 +2,6 @@
   // Footer listener
   addFooterListeners('closed_h');
 
-  // Invisible menu fix
-  setWhiteMenu();
   regWordsRanomizer();
 
   // Button's margin bug fix for Edge/IE

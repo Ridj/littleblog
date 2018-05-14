@@ -671,6 +671,10 @@ label[for="username-password"] {
   border-color: rgba(111, 9, 34, 0.71);
 }
 
+.red_scheme_body .menu_h {
+  background: #cad9d9;
+}
+
 .red_scheme_body .header__title {
   text-shadow: black 0.07vh 0.07vh 0.07vh, grey 0.3vh 0.2vh 0.2vh,
     0 3px 5px rgba(0, 0, 0, 0.38),

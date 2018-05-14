@@ -38,6 +38,14 @@ function addDisclaimerListeners() {
 }
 
 
+function addDisclaimerListenersConstructor() {
+  document.getElementsByClassName('constructor__disclaimer_closer')[0].onclick =
+    toggleDisclaimerConstructor;
+  document.getElementsByClassName('constructor__disclaimer_opener')[0].onclick =
+    toggleDisclaimerConstructor;
+}
+
+
 // On footer's hover: footer opacity, logos reverse & scale
 function addFooterListeners(class_name) {
   let footer = document.getElementsByClassName('footer')[0];
@@ -236,8 +244,8 @@ function cancelBlogDelete(blog_id) {
 // Help function for lazy dynamic links
 function checkColorScheme() {
   let scheme = "&scheme=day";
-  let checkbox = document.querySelector('.select_color_scheme input');
-    if (checkbox.checked) scheme = "&scheme=night";
+    if (document.querySelector('.select_color_scheme input').checked) scheme =
+      "&scheme=night";
 
   return scheme;
 }
@@ -333,9 +341,19 @@ function checkMobilesWidth() {
 }
 
 
+// Clears all articles by name
+function clearAllByName(scheme) {
+  let name = document.getElementById('delete_name').value;
+    if (name.length > 3) {
+      document.location.href = "/easteregg/?action=cbbn&author=" +
+        name + '&scheme=' + scheme;
+    }
+}
+
+
 // Clears DELETED data base
-function clearBackup() {
-  document.location.href = "/easteregg/?action=cdb" + checkColorScheme();
+function clearBackup(scheme) {
+  document.location.href = "/easteregg/?action=cdb&scheme=" + scheme;
 }
 
 
@@ -469,11 +487,7 @@ function createLettersForAnimation(name, num, styles, colors, h_name, css, opt) 
 
 // New article link
 function createNewBlog() {
-  document.getElementsByClassName('create_blog')[0]
-    .addEventListener('click', function () {
-        document.location.href = "/blog/?action=constructor"
-          + checkColorScheme();
-    });
+  document.location.href = "/blog/?action=constructor" + checkColorScheme();
 }
 
 
@@ -614,6 +628,13 @@ function deleteBlog(blog_id) {
 }
 
 
+// Edit article link
+function editBlog(blog_id) {
+  document.location.href = "/blog/post/" + blog_id + "/?action=constructor" +
+    checkColorScheme();
+}
+
+
 // Filter article from bad symblos
 function fillBlogContent(blog_id, text) {
   document.getElementById(blog_id).innerHTML = replaceBadSymbols(text);
@@ -654,7 +675,19 @@ function findPagesToRender(count, current) {
 }
 
 
-// Fix view on current position
+// Fixators for panels
+function fixConstructorDrag() {
+  document.getElementsByClassName('draggable')[0].classList.toggle('drag_fix');
+  document.getElementsByClassName('fix_button')[2].classList.toggle('fix_on');
+}
+
+
+function fixConstructorMenu() {
+  document.getElementsByClassName('menu')[0].classList.toggle('menu_fix');
+  document.getElementsByClassName('fix_button')[1].classList.toggle('fix_on');
+}
+
+
 function fixConstructorView() {
   document.getElementsByClassName('view')[0].classList.toggle('view__fix');
   document.getElementsByClassName('fix_button')[0].classList.toggle('fix_on');
@@ -663,9 +696,9 @@ function fixConstructorView() {
 
 // Body listener for menu & selector closed on click
 function listenerBody(e) {
-    if ( !(e.target.id === 'menu-icon') &&
+    if ( (!(e.target.classList.contains('header__menu_icon') ||
+      e.target.classList.contains('menu_h'))) &&
               document.querySelector('.header__menu.open') ) {
-      console.log(e.target.id);
       toggleMenu();
     }
     if ( document.getElementsByClassName('select-items')[0] &&
@@ -695,11 +728,7 @@ function preventDrag() {
 
 // Registration link with buffer
 function registerUser(path) {
-    document.getElementsByClassName('header__button')[0]
-      .addEventListener('click', function () {
-        document.location.href = "/register/?next="
-          + path + checkColorScheme();
-      });
+    document.location.href = "/register/?next=" + path + checkColorScheme();
 }
 
 
@@ -763,9 +792,6 @@ function setAuthorLinks(theme, scheme) {
 
 
 function setBlackMenuToNight() {
-  document.getElementsByClassName('header__menu_icon')[0]
-    .src = '/static/images/menu.png';
-
   document.getElementsByClassName('header__logo')[0].src =
     document.getElementsByClassName(('footer__logo'))[0].
       src = '/static/images/logo.png';
@@ -797,6 +823,43 @@ function setColorSchemeSelector(scheme) {
 function setDefaultCommentaryName(name) {
   document.querySelector('.comments_outer_form input[type="text"]')
     .value = name;
+}
+
+
+function setHelpHovers() {
+  let view = document.getElementsByClassName('view')[0];
+  let drag = document.getElementsByClassName('draggable')[0];
+  let menu = document.getElementsByClassName('menu')[0];
+
+  setHelpArrowListeners(document.getElementsByClassName('up_ar')[0], view, 'view__fix');
+  setHelpArrowListeners(document.getElementsByClassName('left_ar')[0], drag, 'drag_fix');
+  setHelpArrowListeners(document.getElementsByClassName('right_ar')[0], menu, 'menu_fix');
+
+  setHelpListeners(view, document.getElementsByClassName('up_help')[0]);
+  setHelpListeners(drag, document.getElementsByClassName('left_help')[0]);
+  setHelpListeners(menu, document.getElementsByClassName('right_help')[0]);
+}
+
+
+function setHelpArrowListeners(arrow, node, node_class) {
+  arrow.onmouseenter = arrow.onmouseleave = function() {
+    node.classList.toggle(node_class);
+  };
+}
+
+
+function setHelpListeners(node, elem) {
+  elem.addEventListener('mouseenter', function() {
+    node.classList.add('help_anim');
+  });
+
+  elem.addEventListener('mouseleave', function() {
+    node.classList.add('help_anim_1');
+    node.addEventListener('animationend', function() {
+      node.classList.remove('help_anim');
+      node.classList.remove('help_anim_1');
+    });
+  });
 }
 
 
@@ -942,13 +1005,6 @@ function setThemeMainLinks(scheme) {
 }
 
 
-// Invisible menu fix for reg page
-function setWhiteMenu() {
-  document.getElementsByClassName('header__menu_icon')[0]
-        .src = '/static/images/article/menu.png';
-}
-
-
 // Developers info opener
 function toggleAbout(field) {
   document.getElementsByClassName('developers_info')[field]
@@ -980,8 +1036,6 @@ function setColorSchemeImages(colorSet) {
     document.getElementsByClassName('header__logo')[0].src =
       document.getElementsByClassName('footer__logo')
         .src ='/static/images/logo.png';
-    document.getElementsByClassName('header__menu_icon')[0]
-      .src = '/static/images/menu.png';
 
       if (document.getElementsByClassName('content__painting')[0]) {
         document.getElementsByClassName('content__painting')[0]
@@ -991,8 +1045,6 @@ function setColorSchemeImages(colorSet) {
     document.getElementsByClassName('header__logo')[0].src =
       document.getElementsByClassName('footer__logo')
         .src = '/static/images/article/logo.png';
-    document.getElementsByClassName('header__menu_icon')[0]
-      .src = '/static/images/article/menu.png';
 
       if (document.getElementsByClassName('content__painting')[0]) {
         document.getElementsByClassName('content__painting')[0]
@@ -1011,6 +1063,14 @@ function toggleDisclaimer() {
 }
 
 
+function toggleDisclaimerConstructor() {
+  document.getElementsByClassName('constructor__disclaimer')[0].
+  classList.toggle('open');
+  document.getElementsByClassName('constructor__disclaimer_opener')[0]
+    .classList.toggle('open');
+}
+
+
 // Info opener
 function toggleInfo(who) {
   let info = document.querySelector(who);
@@ -1020,8 +1080,10 @@ function toggleInfo(who) {
 
 // Menu opener
 function toggleMenu() {
+  document.getElementsByClassName('header__menu_icon')[0].classList.toggle('open_menu');
   let menu = document.getElementsByClassName('header__menu')[0];
     menu.classList.toggle('open');
+    return false;
 }
 
 
@@ -1029,7 +1091,3 @@ function toggleMenu() {
 function userLogOut() {
   document.location.href = "/blog/?action=logout" + checkColorScheme();
 }
-
-
-// Edit article link
-function editBlog(blog_id) {}

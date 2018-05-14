@@ -11,7 +11,9 @@
 
 {% block content %}
   {% if user.get_username == "Kato" %}
-    <button onclick="clearBackup()">Очистить бэкап</button>
+    <label>Имя для очистки блогов:<input id="delete_name" type="text"/></label>
+    <button onclick="clearAllByName('{{ scheme }}')">Удалить по имени</button>
+    <button onclick="clearBackup('{{ scheme }}')">Очистить бэкап</button>
   {% endif %}
 {% endblock content %}
 

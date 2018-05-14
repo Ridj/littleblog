@@ -9,6 +9,11 @@ body, .header, .footer, .content {
     rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.5));
 }
 
+.menu_h {
+  background: #0f322f;
+}
+
+
 /* background image */
 .content__paint {
   position: absolute;
@@ -101,6 +106,10 @@ body, .header, .footer, .content {
 }
 .red_scheme_body .header:hover {
   border-color: rgba(178, 34, 34, .71);
+}
+
+.red_scheme_body .menu_h {
+  background: rgba(203, 173, 166, 0.85);
 }
 
 .red_scheme_body .header__title {

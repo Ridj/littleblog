@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/blog.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/article.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/constructor.css' %}">
+    {% if blog %} <style> .art_add { margin-top: -4vh; } </style> {% endif %}
 {% endblock style %}
 
 
@@ -25,9 +26,8 @@
         <b>Панель визуализации.</b>
         <i>
           Здесь можно посмотреть, как будет выглядеть ваша статья после публикации.
-          Левая кнопка закрепляет текущее состояние панели. Кнопка справа от неё
-          меняет режим визуализации. В правом углу находится кнопка публикации статьи,
-          нажмите её, когда ваша статья будет готова.
+          Кроме того, в правом углу находится кнопка публикации статьи, нажмите её,
+          когда ваша статья будет готова.
         </i>
       </span>
 
@@ -35,11 +35,10 @@
       <span class="constructor__disclaimer_help left_help">
         <b>Панель управления элементом.</b>
         <i>
-          В панели слева можно задать настройки для текущего элемента - фон, шрифт и
-          многое другое. Здесь находится база преднастроек для удобства и быстроты
-          работы. Для профессионалов создан специальный режим - "Web Developer", где
-          с помощью языков CSS/HTML возможно настроить отображение элемента максимально
-          точно.
+          На панели управления элементом можно задать настройки для текущего элемента
+          - фон, шрифт и прочее. Здесь находятся преднастройки для удобства и быстрой
+          работы. Для профессионалов доступен специальный режим - "Web Developer", где
+          с помощью CSS возможно настроить отображение элемента максимально точно.
         </i>
       </span>
 
@@ -48,53 +47,64 @@
         <b>Дерево элементов.</b>
         <i>
           Все созданные элементы имеют своё место в дереве. Здесь можно выбрать блок
-          или элемент для изменения настроек или редакции его наполнения. Кроме того -
-          когда вы создаёте новый элемент - он добавляется в конец дерева, а на этой
-          панели можно изменить их порядок, просто перетащив мышкой элемент туда, куда
-          нужно или же удалить его. Также, здесь находится справка по тонким моментам
-          блога - как то: добавление в статью изображений или видео, местные особенности
-          использования эффектов css-анимации.
+          или элемент для изменения настроек или его содержания. Также, когда вы
+          создаёте новый элемент, он добавляется в конец дерева, а на этой панели
+          можно изменить их порядок, перетащив мышкой элемент куда нужно или удалить
+          его. Здесь же находится справка по добавлению в статью изображений и видео.
         </i>
       </span>
 
-      <span class="constructor__arrow down_ar">🢃</span>
       <span class="constructor__disclaimer_help down_help">
         <b>Рабочая панель.</b>
         <i>
-          Тут происходит магия - создание и наполнение пустых элементов контентом.
-          Создайте новый элемент или выберете из дерева элементов существующий и
-          наполните его содержимым!
+          А здесь происходит магия: создание и наполнение элементов контентом.
+          Создайте новый элемент или выберите из дерева элементов существующий и
+          наполните его своим содержимым!
         </i>
       </span>
+      <span class="constructor__arrow down_ar">📖</span>
 
       <span class="constructor__disclaimer_closer" title="Скрыть справку">⌧</span>
   </fieldset>
 
+  <span class="constructor__disclaimer_opener open"
+        title="Показать справку">❔ Показать справку ❔</span>
+
   <div class="constructor editor">
-    <pre style="color: white">
-    </pre>
+    <textarea id="editor_content">
+    </textarea>
   </div>
 
   <div class="constructor view">
     <div class="view_inner">
       <fieldset class="blog__article" id="newarticle">
-        <legend>Название</legend>
-        <div class="blog__content" id="newcontent"><ul>
-            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
-            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
-            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
-            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
-            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
-            <li>1</li><li>1</li><li>1</li><li>1</li><li>1</li><li>1</li>
-          </ul><pre>ssasassaasassaassasasasssasaassasasasaasasassasassasasasaassssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss ssasassaasassaassasasasssasaassasasasaasasassasassasasasaassssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</pre></div>
+        <legend>{% if blog %}{{ blog.name }}{% else %}Название{% endif %}</legend>
+        <div class="blog__content" id="newcontent">
+          <h1>Пусто</h1>
+        </div>
         <span class="blog__author">Автор: <b>{{ user.username }}</b></span>
       </fieldset>
     </div>
 
-    <button class="fix_button"
+    <div class="article__form_div">
+      <button class="article__form_cancel"
+              onclick="confirmPublication()">Отмена</button>
+
+      <form class="article__form" method="POST">
+        {% csrf_token %}
+        <table class="article__form_table">{{ art_form.as_table }}</table>
+          <input class="article__form_submit" type="submit" value="Опубликовать!">
+      </form>
+    </div>
+
+    <button class="constructor__button fix_button"
             onclick="fixConstructorView()">📌</button>
-    <button class="view_button"
+    <button class="constructor__button view_button"
             onclick="changeConstructorView()">💠</button>
+    <button class="constructor__button publish"
+            onclick="confirmPublication()">📜</button>
+    <button class="publish__button"
+            onclick="confirmPublication()">Опубликовать!</button>
 
     <img class="content__painting" src="{% if scheme != 'night' %}
       {% static 'images/blog/background.png' %}{% else %}
@@ -102,14 +112,27 @@
   </div>
 
   <div class="constructor menu">
+    <span class="elem_logo">Древо элементов</span>
+
+    <div class="elem_tree_container">
+      <ul id="elem__tree"></ul>
+    </div>
+
+    <button class="constructor__button fix_button"
+            onclick="fixConstructorMenu()">📌</button>
+
+    <button class="constructor__button settings_button"
+            onclick="" title="Общие настройки">🔧</button>
+
+    <button class="constructor__button help_button"
+            onclick="" title="Помощь">📷</button>
   </div>
 
   <div class="constructor draggable">
-    <button>Li</button><button>div</button>
-    <button>span</button><button>h1</button>
-    <button>h2</button><button>h2</button>
-    <button>p</button><button>table</button>
-    <input type="file" accept="image/jpeg,image/png">
+    <h2 class="drag_elem_name">Название элемента</h2>
+    <span class="elem_logo">Свойства</span>
+    <button class="constructor__button fix_button"
+            onclick="fixConstructorDrag()">📌</button>
   </div>
 
 {% endblock content %}
@@ -118,8 +141,12 @@
 {% block script_builder %}
   <script>
     setColorSchemeSelector('{{ scheme }}');
+
+    {% if blog %}
+      fillBlogContent('newcontent',
+        '{{ blog.content }}' + '{{ blog_add.content_add }}');
+    {% endif %}
   </script>
-  <script async type="text/javascript" src="//mod.imgbb.com/website.js" charset="utf-8"></script>
   <script src="{% static 'scripts/constructor_page_builder.js'%}"></script>
   <script src="{% static 'scripts/constructor.js'%}"></script>
 {% endblock script_builder %}
