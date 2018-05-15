@@ -76,6 +76,13 @@ body {
   text-shadow: 2px 2px 1px rgba(0, 0, 0, .2);
 }
 
+.art_add .data_created {
+  top: .5vw;
+}
+.art_add .data__modified {
+  top: 2.9vw;
+}
+
 /* comments block */
 .article__comments {
   position: relative;
@@ -334,12 +341,6 @@ body {
     3px 5px 5px rgba(104, 4, 42, 0.35),
     0 0 5px #000000,
     0 0 10px #515151;
-}
-.red_scheme_body .art_add .data_created {
-  top: .5vw;
-}
-.red_scheme_body .art_add .data__modified {
-  top: 2.9vw;
 }
 
 .red_scheme_body .new_comment:hover {

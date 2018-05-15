@@ -38,6 +38,7 @@ body {
   left: calc(3vw + 10px);
   font-style: italic;
   font-size: calc(1vw + 18px);
+  white-space: nowrap;
 }
 
 .header__title b {

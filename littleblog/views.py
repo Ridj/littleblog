@@ -1,6 +1,7 @@
 from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
+from django.utils import timezone
 from .models import *
 from math import ceil
 from .forms import ArticleForm, CommentForm, UserForm
@@ -27,9 +28,10 @@ def article(request, blog_id):
                                     'type': 'edit'
                             })
 
-    action = request.GET.get("action", "")
-    if action == 'constructor':
-        return get_constructor(request, blog_id)
+    if request.method == 'GET':
+        action = request.GET.get("action", "")
+        if action == 'constructor':
+            return get_constructor(request, blog_id)
 
     return get_article(request, blog_id)
 
@@ -445,13 +447,18 @@ def record_to_db(model, from_blog, request):
                     if model.author != request.POST.get("author") or \
                        model.author != request.user.get_username():
                         return False
+                    print(timezone.now())
+                    model.modified = timezone.now()
+                    print(model.modified)
                 except Blog.DoesNotExist:
                     return False
             model.content = request.POST.get("content")
             model.name = request.POST.get("name")
             theme = request.POST.get("theme")
-            if theme == 'Учёба' or theme == 'Компьютер':
-                model.theme = theme
+            if theme == '1':
+                model.theme = 'Учёба'
+            elif theme == '2':
+                model.theme = 'Компьютер'
             else:
                 model.theme = 'Разное'
         else:
@@ -460,7 +467,8 @@ def record_to_db(model, from_blog, request):
     if from_blog is False or request is False:
         model.save()    # New article or restoration or deletion
     else:
-        model.save(update_fields=['content', 'name', 'theme'])  # Edit article
+        # Edit article
+        model.save(update_fields=['content', 'modified', 'name', 'theme'])
 
     if flag_is:
         if from_blog is False or request is False:

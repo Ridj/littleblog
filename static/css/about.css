@@ -276,6 +276,21 @@ body {
   border: 1px solid firebrick;
 }
 
+.red_scheme_body .footer {
+  border-color: firebrick;
+  background: linear-gradient(to left bottom, rgba(0, 0, 0, 0.1),
+              rgba(178, 34, 34, 0.4));
+}
+
+.red_scheme_body .footer__link:before {
+  text-shadow: lavender 0 0 0.1vh,
+               darkgrey 0 0 0.1vh,
+               darkgrey 0 0 0.1vh,
+               lavender 0.07vh 0.07vh 0.07vh,
+               darkgrey 0.3vh 0.2vh 0.2vh;;
+  color: black;
+}
+
 
 /* ACTIVE STYLES */
 .open {

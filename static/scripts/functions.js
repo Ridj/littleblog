@@ -255,7 +255,6 @@ function checkColorScheme() {
 function checkHeader() {
   let header = document.getElementsByClassName('header')[0];
   let width = document.documentElement.offsetWidth;
-    console.log(width, header.getBoundingClientRect().right);
   if (width > header.getBoundingClientRect().width) {
     header.style.width = width + 'px';
   }
@@ -291,7 +290,6 @@ function checkHideBlogVisibility() {
   let div = document.getElementsByClassName('main__images_block')[0];
   let available = height - div.getBoundingClientRect().bottom - 70;
   let articles = document.getElementsByClassName('blog__article');
-    console.log(height,  available);
   if (height / available < 2) {
     for (let i = 0; i < articles.length; i++) {
       articles[i].style.maxHeight = (available / 2 - 50) + 'px';
@@ -636,8 +634,8 @@ function editBlog(blog_id) {
 
 
 // Filter article from bad symblos
-function fillBlogContent(blog_id, text) {
-  document.getElementById(blog_id).innerHTML = replaceBadSymbols(text);
+function fillBlogContent(blog_id, text, flag=false) {
+  document.getElementById(blog_id).innerHTML = replaceBadSymbols(text, flag);
 }
 
 
@@ -760,9 +758,15 @@ function regWordsRanomizer(flag=false) {
 
 
 // Replacer for bad HTML symbols
-function replaceBadSymbols(text) {
+function replaceBadSymbols(text, flag=false) {
+  if (flag) {
+    return text.replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+               .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+             .replace(/⤓/g, '⤓\n');
+  }
   return text.replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-             .replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+             .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+             .replace(/⤓/g, '\n');
 }
 
 
@@ -1005,10 +1009,22 @@ function setThemeMainLinks(scheme) {
 }
 
 
-// Developers info opener
+// Developers info opener --smoth opacity edit--
 function toggleAbout(field) {
-  document.getElementsByClassName('developers_info')[field]
-    .classList.toggle('open');
+  let dev = document.getElementsByClassName('developers_info')[field];
+    if (dev.classList.contains('open')) {
+      dev.style.opacity = '0';
+      setTimeout(function() {
+        dev.classList.toggle('open');
+        dev.style.opacity = '1';
+      }, 500)
+    } else {
+      dev.style.opacity = '0';
+      dev.classList.toggle('open');
+      setTimeout(function() {
+        dev.style.opacity = '1';
+      }, 50)
+    }
 }
 
 
@@ -1063,18 +1079,54 @@ function toggleDisclaimer() {
 }
 
 
+// -- smooth opacity edition --
 function toggleDisclaimerConstructor() {
-  document.getElementsByClassName('constructor__disclaimer')[0].
-  classList.toggle('open');
-  document.getElementsByClassName('constructor__disclaimer_opener')[0]
-    .classList.toggle('open');
+  let help = document.getElementsByClassName('constructor__disclaimer')[0];
+  let opener = document.getElementsByClassName('constructor__disclaimer_opener')[0];
+    if (help.classList.contains('open')) {
+      opener.style.opacity = '0';
+      opener.classList.toggle('open');
+      setTimeout(function() {
+        opener.style.opacity = '1';
+      }, 50);
+
+      help.style.opacity = '0';
+      setTimeout(function() {
+        help.classList.toggle('open');
+        help.style.opacity = '1';
+      }, 500)
+    } else {
+      opener.style.opacity = '0';
+      setTimeout(function() {
+        opener.classList.toggle('open');
+        opener.style.opacity = '1';
+      }, 500);
+
+      help.style.opacity = '0';
+      help.classList.toggle('open');
+      setTimeout(function() {
+        help.style.opacity = '1';
+      }, 50);
+    }
 }
 
 
-// Info opener
+// Info opener --smoth opacity edition--
 function toggleInfo(who) {
   let info = document.querySelector(who);
-    info.classList.toggle('open');
+    if (info.classList.contains('open')) {
+      info.style.opacity = '0';
+      setTimeout(function() {
+        info.classList.toggle('open');
+        info.style.opacity = '1';
+      }, 500)
+    } else {
+      info.style.opacity = '0';
+      info.classList.toggle('open');
+      setTimeout(function() {
+        info.style.opacity = '1';
+      }, 50)
+    }
 }
 
 

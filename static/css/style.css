@@ -312,15 +312,12 @@ body {
   width: 85vw;
   max-width: 85vw;
   overflow-x: hidden;
-  user-select: text;
-  -ms-user-select: text;
-  -moz-user-select: text;
-}
-
-.blog__content pre {
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -o-pre-wrap;
+  user-select: text;
+  -ms-user-select: text;
+  -moz-user-select: text;
 }
 
 /* blog link */
@@ -355,7 +352,7 @@ body {
 /* blog theme */
 .blog__theme {
   position: absolute;
-  top: 6vh;
+  top: 4vh;
   right: 40vw;
   padding: .25vw 1vw .5vw 1vw;
   border: 2px dotted gold;

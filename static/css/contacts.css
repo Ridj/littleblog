@@ -54,6 +54,11 @@ body, .content {
   opacity: .9;
   outline: none;
   z-index: 4;
+
+  -webkit-transition: .5s;
+  -moz-transition: .5s;
+  -o-transition: .5s;
+  transition: .5s;
 }
 
 .me {
@@ -156,6 +161,11 @@ body, .content {
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
   z-index: 5;
+
+  -webkit-transition: .5s;
+  -moz-transition: .5s;
+  -o-transition: .5s;
+  transition: .5s;
 }
 
 .developers_fieldset {

@@ -71,17 +71,64 @@
         title="Показать справку">❔ Показать справку ❔</span>
 
   <div class="constructor editor">
-    <textarea id="editor_content">
-    </textarea>
+
+    <div class="warning_div declined">Отменено</div>
+    <div class="warning_div saved">Сохранено</div>
+
+    <div class="editor_block_main">
+      <label>Тема
+        <select class="settings__theme_selector">
+          <option value="1">Учёба</option>
+          <option value="2">Компьютер</option>
+          <option value="3" selected>Разное</option>
+        </select>
+      </label>
+
+      <span class="editor__buttoms">
+        <button class="constructor__button accept-elem"
+                onclick="saveChanges(true)">✔</button>
+        <button class="constructor__button info-elem"
+                onclick="showHelpEditor(false)">🛈</button>
+      </span>
+    </div>
+
+    <div class="editor_block">
+
+      <span class="editor__buttoms">
+        <button class="constructor__button accept-elem"
+                onclick="saveChanges()">✔</button>
+        <button class="constructor__button info-elem"
+                onclick="showHelpEditor(1)">🛈</button>
+        <button class="constructor__button decline-elem"
+                onclick="declineChanges()">✘</button>
+      </span>
+    </div>
+
+    <div class="editor_element open">
+      <span class="editor__buttoms">
+        <button class="constructor__button accept-elem"
+                onclick="saveChanges()">✔</button>
+        <button class="constructor__button info-elem"
+                onclick="showHelpEditor(2)">🛈</button>
+        <button class="constructor__button decline-elem"
+                onclick="declineChanges()">✘</button>
+      </span>
+
+      <pre id="editor_pre"></pre>
+
+      <label for="editor_content">Элемент</label>
+        <textarea id="editor_content"
+                  onkeypress="preventNewLine()"
+                  onkeydown="preventNewLine()"
+                  onkeyup="showPreview()"></textarea>
+    </div>
   </div>
 
   <div class="constructor view">
     <div class="view_inner">
       <fieldset class="blog__article" id="newarticle">
         <legend>{% if blog %}{{ blog.name }}{% else %}Название{% endif %}</legend>
-        <div class="blog__content" id="newcontent">
-          <h1>Пусто</h1>
-        </div>
+        <pre class="blog__content" id="newcontent"><h1>Пусто</h1>sss\nsss<code></code></pre>
         <span class="blog__author">Автор: <b>{{ user.username }}</b></span>
       </fieldset>
     </div>
@@ -101,10 +148,13 @@
             onclick="fixConstructorView()">📌</button>
     <button class="constructor__button view_button"
             onclick="changeConstructorView()">💠</button>
+
     <button class="constructor__button publish"
-            onclick="confirmPublication()">📜</button>
+            onclick="confirmPublication('{{ user.username }}')"
+            disabled>📜</button>
     <button class="publish__button"
-            onclick="confirmPublication()">Опубликовать!</button>
+            onclick="confirmPublication('{{ user.username }}')"
+            disabled>Опубликовать!</button>
 
     <img class="content__painting" src="{% if scheme != 'night' %}
       {% static 'images/blog/background.png' %}{% else %}
@@ -144,7 +194,7 @@
 
     {% if blog %}
       fillBlogContent('newcontent',
-        '{{ blog.content }}' + '{{ blog_add.content_add }}');
+        '{{ blog.content }}' + '{{ blog_add.content_add }}', true);
     {% endif %}
   </script>
   <script src="{% static 'scripts/constructor_page_builder.js'%}"></script>
