@@ -234,7 +234,6 @@ body {
   width: 85vw;
   max-width: 85vw;
   margin: 5vh 0 5vh 5vw;
-  padding: 1vw;
   border: .5vw dotted black;
   background: rgba(255, 255, 255, .8);
   background-clip: padding-box;
@@ -266,6 +265,7 @@ body {
   user-select: text;
   -ms-user-select: text;
   -moz-user-select: text;
+  z-index: 5;
 
   -webkit-transition: 1s ease-in-out;
   -moz-transition: 1s ease-in-out;
@@ -289,6 +289,7 @@ body {
   font-size: 1.25vw;
   color: lavender;
   cursor: pointer;
+  z-index: 5;
 
   -webkit-transition: .5s;
   -moz-transition: .5s;
@@ -309,15 +310,24 @@ body {
 
 .blog__content {
   position: relative;
-  width: 85vw;
-  max-width: 85vw;
-  overflow-x: hidden;
+  top: -1vh;
+  height: 100%;
+  margin: 0;
+  padding: 2.5vw;
+  overflow: hidden;
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -o-pre-wrap;
   user-select: text;
   -ms-user-select: text;
   -moz-user-select: text;
+  z-index: 3;
+}
+.blog__content:hover {
+}
+
+#blog__content_settings {
+  display: none;
 }
 
 /* blog link */
@@ -352,7 +362,7 @@ body {
 /* blog theme */
 .blog__theme {
   position: absolute;
-  top: 4vh;
+  top: 3.5vh;
   right: 40vw;
   padding: .25vw 1vw .5vw 1vw;
   border: 2px dotted gold;
@@ -362,7 +372,7 @@ body {
   font-style: italic;
   color: gold;
   cursor: pointer;
-  z-index: 4;
+  z-index: 5;
 
   -webkit-transition: 1s;
   -moz-transition: 1s;
@@ -385,7 +395,7 @@ body {
   background: black;
   font-size: 1.25vw;
   color: lavender;
-  z-index: 3;
+  z-index: 5;
 }
 .data_created {
   top: 2vw;

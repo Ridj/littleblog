@@ -94,6 +94,7 @@
   </div>
 
 
+    {% if preblog %}
     <fieldset class="blog__article hide_blog" id="article{{ preblog.id }}">
       <legend>{{ preblog.name }}</legend>
 
@@ -116,8 +117,9 @@
 
       <span class="blog__author">Автор: <b>{{ preblog.author }}</b></span>
     </fieldset>
+  {% endif %}
 
-
+  {% if blog %}
   <fieldset class="blog__article" id="article{{ blog.id }}">
     <legend>{{ blog.name }}</legend>
 
@@ -140,6 +142,7 @@
 
     <span class="blog__author">Автор: <b>{{ blog.author }}</b></span>
   </fieldset>
+  {% endif %}
 
 {% endblock content %}
 

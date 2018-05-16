@@ -71,29 +71,104 @@
         title="Показать справку">❔ Показать справку ❔</span>
 
   <div class="constructor editor">
-
     <div class="warning_div declined">Отменено</div>
     <div class="warning_div saved">Сохранено</div>
 
-    <div class="editor_block_main">
-      <label>Тема
-        <select class="settings__theme_selector">
-          <option value="1">Учёба</option>
-          <option value="2">Компьютер</option>
-          <option value="3" selected>Разное</option>
-        </select>
-      </label>
+
+    <div class="editor_block_main open">
+
+      <div class="block_main__settings"
+           align="center">
+        <label for="settings__name_input"> Название</label>
+          <input type="text"
+                 minlength="1"
+                 maxlength="30"
+                 id="settings__name_input"
+                 value="{% if blog %}{{ blog.name }}{% else %}Новый блог{% endif %}"/>
+
+        <label for="settings__theme_selector">Тема</label>
+
+        <div id="settings__theme_container"></div>
+      </div>
 
       <span class="editor__buttoms">
         <button class="constructor__button accept-elem"
                 onclick="saveChanges(true)">✔</button>
-        <button class="constructor__button info-elem"
-                onclick="showHelpEditor(false)">🛈</button>
+        <button class="constructor__button info-elem">🛈</button>
       </span>
+
+
+      <fieldset class="editor_main_block_disclaimer">
+        <legend>Главные настройки</legend>
+        <div>
+          <b><i>Основное</i></b>
+          <b>
+            В главных настройках задаются название статьи, а также её
+            принадлежность к определённому разделу блога. А именно: "Учёба",
+            "Компьютер", "Разное" (для всего остального). Указать раздел
+            полезно для дальнейшего поиска статьи. По умолчанию, все статьи
+            уходят в раздел "Разное", если не указано иначе.
+          </b>
+        </div>
+        <div>
+          <b><i>Сохранение настроек</i></b>
+          <b>
+            Для того, чтобы настройки вступили в силу - нужно сохранить их,
+            нажав галочку. Если перейти к редактированию элемента или блока,
+            несохранённые настройки сбросятся и их придётся задавать заново.
+            <br>
+          </b>
+        </div>
+        <div>
+          <b>
+            Для свойств главных настроек недоступен режим "Web Developer", поэтому
+            не удастся задать для контейнера с содержимым что-то особенное вроде
+            анимации или теней, но кое-что изменить всё-же можно. В свойствах
+            главного контейнера можно задать его фон и общие свойства для статьи
+            в целом, а именно:
+            <ul style="text-align: left">
+              <li>
+                <i>Выравнивание содержимого</i> - по левому краю, по центру, либо по
+                правому краю. К примеру, первый блок этой справки выравнен по центру,
+                а этот список по левому краю.
+              </li><br>
+              <li>
+                <i>Цвет текстового содержимого</i>. Это будет основной цвет по умолчанию для
+                всех элементов и блоков. Для каждого из них можно будет задать цвет
+                текста отдельно, но если ваша статья будет вся в определённой цветовой
+                гамме - то удобно задать цвет именно здесь.
+              </li>
+              <li><br>
+                <i>Отступы</i>. Задаёт отступы от краёв контейнера в разделе сайта
+                "Блог" до вашего содержимого. Доступны три варианта, каждый из
+                которых зависит от доступной ширины экрана. Разница между большими
+                и маленькими отступами приблизительно в два раза. Значение обычных
+                отступов находится между ними.
+              </li><br>
+              <li>
+                <i>Шрифт</i> - доступны 4 вида шрифта: классический, курсивный,
+                декоративный и типографический. Отображение шрифтов может
+                варьироваться в зависимости от браузера. Для отдельных элементов
+                и блоков можно выбрать свой шрифт или задать особый в режиме
+                "Web Developer".
+              </li>
+            </ul>
+          </b>
+        </div>
+        <div>
+          <b><i>Фон</i></b><br>
+          <b>Здесь можно задать фон для всего контейнера статьи. Можно выбрать
+          как определённый цвет, так и градиент - линейный, либо радиальный.
+          Кроме того, можно использовать картинку для фона контейнера. Подробности
+          о загрузке картинок для блога читайте в справке "Древа Элементов"</b>
+        </div>
+      <span class="editor_main_block_disclaimer_closer"
+            title="Скрыть справку">⌧</span>
+      </fieldset>
     </div>
 
-    <div class="editor_block">
 
+    <div class="editor_block">
       <span class="editor__buttoms">
         <button class="constructor__button accept-elem"
                 onclick="saveChanges()">✔</button>
@@ -104,7 +179,8 @@
       </span>
     </div>
 
-    <div class="editor_element open">
+
+    <div class="editor_element">
       <span class="editor__buttoms">
         <button class="constructor__button accept-elem"
                 onclick="saveChanges()">✔</button>
@@ -116,7 +192,7 @@
 
       <pre id="editor_pre"></pre>
 
-      <label for="editor_content">Элемент</label>
+      <label for="editor_content" id="editor_content_label">Элемент</label>
         <textarea id="editor_content"
                   onkeypress="preventNewLine()"
                   onkeydown="preventNewLine()"
@@ -124,11 +200,25 @@
     </div>
   </div>
 
+
   <div class="constructor view">
+
     <div class="view_inner">
       <fieldset class="blog__article" id="newarticle">
-        <legend>{% if blog %}{{ blog.name }}{% else %}Название{% endif %}</legend>
-        <pre class="blog__content" id="newcontent"><h1>Пусто</h1>sss\nsss<code></code></pre>
+        <legend>
+          {% if blog %}{{ blog.name }}{% else %}Новый блог{% endif %}
+        </legend>
+
+        <pre class="blog__content"
+             id="newcontent"><span class="blog__content_settings"
+                                   id="blog__content_settings">
+                background:<span id="bcs_bg"></span>;
+                padding:<span id="bcs_pd"></span>;
+                text-align:<span id="bcs_ta"></span>;
+                font-family:<span id="bcs_ff"></span>;
+                color:<span id="bcs_c"></span>;
+          </span><h1>Пусто</h1><code></code></pre>
+
         <span class="blog__author">Автор: <b>{{ user.username }}</b></span>
       </fieldset>
     </div>
@@ -159,7 +249,9 @@
     <img class="content__painting" src="{% if scheme != 'night' %}
       {% static 'images/blog/background.png' %}{% else %}
       {% static 'images/blog/background1.png' %}{% endif %}">
+
   </div>
+
 
   <div class="constructor menu">
     <span class="elem_logo">Древо элементов</span>
@@ -178,8 +270,74 @@
             onclick="" title="Помощь">📷</button>
   </div>
 
+
   <div class="constructor draggable">
-    <h2 class="drag_elem_name">Название элемента</h2>
+    <h2 class="drag_elem_name" id="drag_elem_name">Свойства статьи</h2>
+
+    <div class="draggable_properties block_main open">
+      <div class="settings_main">Выравнивание:
+        <select id="bcs_ta_s">
+          <option value="left">|Слева ⇽⇽ |</option>
+          <option value="center">|⇾ Центр ⇽|</option>
+          <option value="right">|⇾⇾ Справа|</option>
+        </select>
+      </div>
+
+      <div class="settings_main">Цвет текста:
+        <input id="bcs_c_s" type="color" />
+      </div>
+
+      <div class="settings_main">Отступы:
+        <select id="bcs_pd_s">
+          <option value="3.5vw">⇿ Обычные</option>
+          <option value="2.5vw">🡘 Меньше</option>
+          <option value="4.5vw">⇽⇾ Больше</option>
+        </select>
+      </div>
+
+      <div class="settings_main">Шрифт:
+        <select id="bcs_ff_s">
+          <option value="sans-serif"
+                  style="font-family: sans-serif">Классика</option>
+          <option value="cursive"
+                  style="font-family: cursive">Курсивный</option>
+          <option value="monospace"
+                  style="font-family: monospace">Типография</option>
+          <option value="fantasy"
+                  style="font-family: fantasy">Декоративный</option>
+        </select>
+      </div>
+
+      <div class="settings_main">Фон:
+        <button onclick="showBackgroundPicker()">Изменить</button>
+      </div>
+
+      <div class="background_picker_m">
+        <select id="bcs_bg_s" onchange="checkBackgroundPickerOptions()">
+          <option value="1" style="color: gray">⬜ Нет</option>
+          <option value="2">⬛ Цвет</option>
+          <option value="3" style="color: blue">◪ Градиент</option>
+          <option value="4" style="color: red">🌆 Картинка</option>
+        </select>
+
+        <input type="color" id="picker_m_c" />
+        <input type="color" id="picker_m_g1" />
+        <input type="color" id="picker_m_g2" />
+        <select id="picker_m_gs1">
+          <option value="linear-gradient">Линейный</option>
+          <option value="radial-gradient">Радиальный</option>
+        </select>
+        <select id="picker_m_gs2">
+          <option value="to top">Вертикальный</option>
+          <option value="to left">Горизонтальный</option>
+          <option value="to left top">Диагональ 1</option>
+          <option value="to right top">Диагональ 2</option>
+        </select>
+        <input type="text" id="picker_m_img">
+        <button onclick="submitBackgroundChanges()">Сохранить фон</button>
+      </div>
+    </div>
+
     <span class="elem_logo">Свойства</span>
     <button class="constructor__button fix_button"
             onclick="fixConstructorDrag()">📌</button>
@@ -194,9 +352,16 @@
 
     {% if blog %}
       fillBlogContent('newcontent',
-        '{{ blog.content }}' + '{{ blog_add.content_add }}', true);
+        '{{ blog.content }}' + '{{ blog_add.content_add }}');
+    {% else %}
+      addContentBoxStyle('newcontent');
     {% endif %}
   </script>
   <script src="{% static 'scripts/constructor_page_builder.js'%}"></script>
   <script src="{% static 'scripts/constructor.js'%}"></script>
+  {% if blog %}
+    <script>
+      setMainStylesIfEddited();
+    </script>
+  {% endif %}
 {% endblock script_builder %}

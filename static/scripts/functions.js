@@ -12,6 +12,21 @@ function addBlogHeaderListeners() {
 }
 
 
+// Sets custom styles for users containers
+function addContentBoxStyle(content_id) {
+  let styleContent = document.getElementById(content_id)
+    .getElementsByClassName('blog__content_settings')[0];
+    if (styleContent) {
+      let style = document.createElement('style');
+      let css = '#' + content_id + '{' + styleContent.textContent + '}';
+        if (style.styleSheet) style.styleSheet.cssText = css;
+        else style.appendChild( document.createTextNode(css) );
+
+      document.getElementsByTagName('head')[0].appendChild(style);
+    }
+}
+
+
 // Names opacity toggle on dev-block hover
 function addContactsHover() {
   let devs = document.getElementsByClassName('show_info');
@@ -527,11 +542,11 @@ function createPageSpan(num, current, typo, theme, author) {
 
 
 // Theme selector - head creation
-function createSelectHead() {
+function createSelectHead(sel_cl='custom-select', text='Раздел') {
   let select = document.createElement('div');
-    select.classList.add('custom-select');
-    select.id = 'custom-select';
-    select.innerHTML = 'Раздел';
+    select.classList.add(sel_cl);
+    select.id = sel_cl;
+    select.innerHTML = text;
     select.onclick = function() {
       this.nextElementSibling.classList.toggle('select-hide');
       this.classList.toggle("select-arrow-active");
@@ -542,10 +557,10 @@ function createSelectHead() {
 
 
 // Theme selector - filling with options
-function createSelectOptions() {
+function createSelectOptions(num=1) {
   let selected = document.createElement('div');
     selected.setAttribute('class', 'select-items select-hide');
-    for (let i = 1; i < 5; i++) {
+    for (let i = num; i < 5; i++) {
       selected.appendChild(createOption(i));
     }
 
@@ -610,7 +625,7 @@ function createWord(letters) {
 }
 
 
-// Create crazy animantion
+// Create crazy animantion -- deprecated --
 function deleteAllAnimations() {
   let curious = document.getElementsByClassName('curious_span');
     for (let i = curious.length - 1; i >= 0; i--) {
@@ -634,8 +649,9 @@ function editBlog(blog_id) {
 
 
 // Filter article from bad symblos
-function fillBlogContent(blog_id, text, flag=false) {
-  document.getElementById(blog_id).innerHTML = replaceBadSymbols(text, flag);
+function fillBlogContent(content_id, text, flag=false) {
+  document.getElementById(content_id).innerHTML = replaceBadSymbols(text, flag);
+  addContentBoxStyle(content_id);
 }
 
 
@@ -761,8 +777,7 @@ function regWordsRanomizer(flag=false) {
 function replaceBadSymbols(text, flag=false) {
   if (flag) {
     return text.replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-               .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
-             .replace(/⤓/g, '⤓\n');
+               .replace(/&quot;/g, '"').replace(/&#39;/g, "'");
   }
   return text.replace(/&lt;/g, '<').replace(/&gt;/g, '>')
              .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
