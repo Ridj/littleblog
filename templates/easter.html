@@ -10,10 +10,34 @@
 
 
 {% block content %}
-  {% if user.get_username == "Kato" %}
-    <label>Имя для очистки блогов:<input id="delete_name" type="text"/></label>
-    <button onclick="clearAllByName('{{ scheme }}')">Удалить по имени</button>
+  {% if user.is_superuser %}
+    <label for="delete_name">Имя для удаления всех статей:
+      <input id="delete_name" type="text"/></label>
+    <label for="delete_article_id">ID статьи:
+      <input id="delete_article_id" type="text"/></label>
+
+    <button class="restore_by_id"
+            onclick="restoreArticleById('{{ scheme }}')">Восстановить по id</button>
+
+    <button class="clear_by_id"
+            onclick="deleteArticleById('{{ scheme }}')">Удалить статью по id</button>
+
+    <button class="clear_by_name"
+            onclick="clearAllByName('{{ scheme }}')">Удалить по имени</button>
+
     <button onclick="clearBackup('{{ scheme }}')">Очистить бэкап</button>
+
+    {% if deleted_blogs %}
+      <table>
+      <tr><th>Название</th><th>Автор</th><th>Id</th></tr>
+      {% for blog in deleted_blogs %}
+        <tr><td>{{ blog.name }}</td><td>{{ blog.author }}</td>
+          <td>{{ blog.id }}</td></tr>
+      {% endfor %}
+      </table>
+    {% endif %}
+    {% else %}
+    <p>Недостаточно прав для просмотра страницы</p>
   {% endif %}
 {% endblock content %}
 

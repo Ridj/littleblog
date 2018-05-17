@@ -7,15 +7,53 @@ body {
 
 /* CONTENT STYLES */
 button {
-  position: fixed;
-  top: 13vh;
+  position: relative;
   right: 2vw;
   padding: 1vh;
+  margin: 5vh 0 5vh 5%;
   border: 2px solid black;
   background: linear-gradient(black, lightslategray);
   font-size: 2vh;
   color: rgba(230, 230, 250, .8);
   cursor: pointer;
+}
+
+input {
+  position: relative;
+  padding: 1vh;
+  font-size: 2vh;
+  border-radius: 15px;
+  outline: none;
+}
+
+label {
+  display: block;
+  font-size: 2.5vh;
+  margin: 2vh 0 2vh 5%;
+  color: lavender;
+}
+
+table {
+  position: relative;
+  width: 100%;
+  top: 100%;
+  font-size: 1.5vh;
+  background: rgba(0, 0, 0, .6);
+  border-collapse: collapse;
+  border-radius: 15px;
+  color: azure;
+  text-align: center;
+}
+
+td, th {
+  border: 2px solid black;
+}
+
+p {
+  text-align: center;
+  margin-top: 25%;
+  font-size: 4vh;
+  color: lavender;
 }
 
 

@@ -31,38 +31,6 @@ body {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.8);
 }
 
-/* reserved buttonx */
-.reserved__buttons {
-  position: absolute;
-  top: 1vh;
-  padding: 1vh;
-  margin-top: .5vh;
-  border-radius: 50%;
-  cursor: pointer;
-  border-color: rgba(0, 0, 0, 0.32);
-  font-size: 2vh;
-  outline: none;
-}
-.reserved__buttons:hover {
-  transform: scale(1.05);
-  box-shadow: gray 0.07vh 0.07vh 0.07vh,
-  black 0.05vh 0.1vh .5vh;;
-}
-
-.anime_go {
-  left: calc(80vw - 64px);
-  background: linear-gradient(to left bottom, rgba(84, 99, 175, 0.59), darkcyan);
-  color: #fcfcfc;
-  text-shadow: 0 0 3px lavender;
-}
-
-.anime_stop {
-  left: calc(90vw - 64px);
-  background: linear-gradient(to left bottom, rgba(175, 9, 35, 0.59), #8b091b);
-  color: #fcfcfc;
-  text-shadow: 0 0 3px lavender;
-}
-
 /* HEADER STYLES */
 .header {
   border-bottom: 0.3vh solid grey;
@@ -309,6 +277,7 @@ body {
 }
 
 .blog__content {
+  display: block;
   position: relative;
   top: -1vh;
   height: 100%;
@@ -318,6 +287,9 @@ body {
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -o-pre-wrap;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
   user-select: text;
   -ms-user-select: text;
   -moz-user-select: text;

@@ -40,6 +40,7 @@ body {
   height: auto;
   margin-top: 9vh;
   border: solid transparent;
+  padding-top: 2vh;
   border-radius: 10px;
   background: rgba(255, 255, 255, .4);
   overflow: visible;

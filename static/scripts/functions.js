@@ -634,6 +634,14 @@ function deleteAllAnimations() {
 }
 
 
+// Delete article by Id
+function deleteArticleById(scheme) {
+  let blog_id = document.getElementById('delete_article_id').value;
+    document.location.href = "/easteregg/?action=dbbid&blog_id=" +
+      blog_id + '&scheme=' + scheme;
+}
+
+
 // Delete article link
 function deleteBlog(blog_id) {
   document.location.href = "/blog/?action=delete&blog_id="
@@ -782,6 +790,14 @@ function replaceBadSymbols(text, flag=false) {
   return text.replace(/&lt;/g, '<').replace(/&gt;/g, '>')
              .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
              .replace(/⤓/g, '\n');
+}
+
+
+// Restore article by Id
+function restoreArticleById(scheme) {
+  let blog_id = document.getElementById('delete_article_id').value;
+    document.location.href = "/easteregg/?action=rabid&blog_id=" +
+      blog_id + '&scheme=' + scheme;
 }
 
 
@@ -1050,10 +1066,14 @@ function toggleColorScheme() {
       scheme = '?scheme=day';
       document.body.classList.remove('red_scheme_body');
       setColorSchemeImages(1);
+      let fixer = document.getElementById('scheme_fixer');
+        if (fixer) fixer.value = 'day';
     } else {
       scheme = '?scheme=night';
       document.body.classList.add('red_scheme_body');
       setColorSchemeImages(0);
+      let fixer = document.getElementById('scheme_fixer');
+        if (fixer) fixer.value = 'night';
     }
 
   findAndReplaceLinks(scheme);

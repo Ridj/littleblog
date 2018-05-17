@@ -100,7 +100,7 @@
   </div>
 
 
-  {% if user.get_username == blog.author %}
+  {% if user.get_username == blog.author or user.is_superuser %}
     <div class="article__buttons" align="right">
       <span id="edit_blog" onclick="editBlog('{{ blog.id }}')">Изменить</span>
       <span id="delete_blog"

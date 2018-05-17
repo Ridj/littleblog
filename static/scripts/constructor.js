@@ -7,22 +7,66 @@
   createThemeSelectorListener();
   setListenerToFontPicker();
   addDisclaimerListenersEditorMainBlock();
+  schemeFixer();
+  listenerForThemeSelector();
 
   window.addEventListener('resize', setLeftForHelpBotton, false);
   document.body.addEventListener('click', listenerBodyConstructor);
 })();
 
 
-function addDisclaimerListenersEditorMainBlock() {
-  document.querySelector('.constructor__button.info-elem').onclick =
-    document.getElementsByClassName('editor_main_block_disclaimer_closer')[0]
-    .onclick = toggleDisclaimerEditorMainBlock;
-
+function setThemeOnLoad(theme) {
+  document.getElementById('settings__theme_selector').textContent = theme;
 }
 
 
-function toggleDisclaimerEditorMainBlock() {
-  let dev = document.getElementsByClassName('editor_main_block_disclaimer')[0];
+function listenerForThemeSelector() {
+  let label = document.querySelector('label[for="settings__theme_container"]');
+    label.onmouseenter = label.onmouseleave = function() {
+      document.getElementById('settings__theme_selector')
+        .classList.toggle('hovered_scheme');
+    }
+}
+
+
+function schemeFixer() {
+  if (document.body.classList.contains('red_scheme_body')) {
+    document.getElementById('scheme_fixer').value = 'night';
+  }
+}
+
+
+function addDisclaimerListenersEditorMainBlock() {
+  document.querySelector('.constructor__button.info-elem').onclick =
+    document.getElementsByClassName('editor_main_block_disclaimer_closer')[0]
+    .onclick = function() {
+      toggleDisclaimerEditorMainBlock('editor_main_block_disclaimer');
+    };
+
+  document.getElementById('picker_m_img2').onclick =
+    document.getElementById('picker_m_img2_closer').onclick = function() {
+      toggleDisclaimerEditorMainBlock('picker_m_img2_disclaimer');
+    };
+
+  document.getElementById('picker_m_gs1').addEventListener('change', function() {
+    let select = document.getElementById('picker_m_gs2').children;
+    if (event.target.value === 'linear-gradient') {
+      select[0].value = 'to top';
+      select[1].value = 'to right';
+      select[2].value = 'to right top';
+      select[3].value = 'to right bottom';
+    } else {
+      select[0].value = 'at top';
+      select[1].value = 'at center';
+      select[2].value = 'at top right';
+      select[3].value = 'at bottom left';
+    }
+  })
+}
+
+
+function toggleDisclaimerEditorMainBlock(class_name) {
+  let dev = document.getElementsByClassName(class_name)[0];
     if (dev.classList.contains('open')) {
       dev.style.opacity = '0';
       setTimeout(function() {
@@ -44,14 +88,14 @@ function toggleDisclaimerEditorMainBlock() {
 function acceptChangesToArticle() {
 
     document.getElementById('id_author').value =
-      document.querySelector('.blog__author b').textContent;
+      document.querySelector('.blog__author b').textContent.trim();
 
     let contentFull = getContent();
       document.getElementById('id_content').value = contentFull[0];
       document.getElementById('id_content_add').value = contentFull[1];
 
     document.getElementById('id_name').value =
-      document.querySelector('#newarticle legend').textContent;
+      document.querySelector('#newarticle legend').textContent.trim();
 
     document.getElementById('id_theme').value =
       getTheme().toString();
@@ -83,46 +127,82 @@ function createElementsTree() {
   let editor_pre = document.getElementById('editor_pre');
   let content = document.getElementById('newcontent').children;
   let label = document.getElementById('editor_content_label');
+  let label_block = document.getElementById('editor_block_label');
   let settingsLabel = document.getElementById('drag_elem_name');
 
-    for (let i = 0; i < content.length; i++) {
-      if (content[i].id === 'blog__content_settings') {
-        continue;
-      }
-      let li = document.createElement('li');
-        let innerContent = content[i].children;
-          li.innerText = content[i].tagName;
 
-        if (content[i].children.length) {
+  let tagMas = ['P', 'H2', 'UL', 'TABLE', 'CODE', 'IMG'];
+
+    for (let i = 0; i < content.length; i++) {
+      if (content[i].tagName !== 'DIV') continue;
+
+      let li = document.createElement('li');
+      let innerContent = content[i].children;
+
+        if (content[i].dataset.namediv) {
+          li.innerText = content[i].dataset.namediv;
+        } else {
+          li.innerText = content[i].dataset.namediv = 'Блок №' + i;
+        }
+
+        li.onclick = function() {
+          listenerBlock(content[i]);
+        };
+
+        if (innerContent.length) {
           let ul = document.createElement('ul');
 
             for (let j = 0; j < innerContent.length; j++) {
+              if (!~tagMas.indexOf(innerContent[j].tagName)) continue;
               let innerLi = document.createElement('li');
-                innerLi.innerText = innerContent[j].tagName;
+
+                if (innerContent[j].dataset.nameelem) {
+                  innerLi.innerText = innerContent[j].dataset.nameelem;
+                } else {
+                  innerLi.innerText = innerContent[j].dataset.nameelem =
+                    'Элемент №' + j;
+                }
+
                 innerLi.onclick = function() {
-                  listenerElement(innerContent[j]);
+                  listenerElement(innerContent[j], content[i]);
                 };
+
               ul.appendChild(innerLi);
             }
           li.appendChild(ul);
-        } else {
-          li.onclick = function() { listenerElement(content[i]) };
         }
       tree.appendChild(li);
     }
 
-  function listenerElement(elem) {
+  function listenerBlock(block) {
+    label_block.textContent = settingsLabel.textContent = block.dataset.namediv;
+    openEditor('.editor_block');
+    hideMainHelpButton();
+    setListenerToDeclineButtonBlock();
+    setListenerToSaveButtonBlock();
+  }
+
+  function listenerElement(elem, parent) {
     editor.value = elem.textContent.replace(/\n/g, '⤓\n');
     editor_pre.innerHTML = elem.outerHTML + '';
     label.textContent = settingsLabel.textContent = elem.tagName;
-    openElementEditor();
-    function createSettingsForElement(elem) {};
+    openEditor('.editor_element');
     setListenerToDeclineButton(editor, elem, settingsLabel);
     setListenerToSaveButton(editor, elem, settingsLabel);
   }
 }
 
-function setListenerToDeclineButton() {}
+
+function hideMainHelpButton() {
+  document.getElementsByClassName('constructor__disclaimer_opener')[0]
+    .classList.remove('open');
+}
+
+
+function showMainHelpButton() {
+  document.getElementsByClassName('constructor__disclaimer_opener')[0]
+    .classList.add('open');
+}
 
 
 // Constructor version
@@ -133,6 +213,7 @@ function createOption(index) {
     option.innerHTML = options[index];
     option.addEventListener('click', function() {
       select.textContent = option.innerHTML;
+      select.classList.remove('select-arrow-active');
     });
 
   return option;
@@ -215,11 +296,13 @@ function listenerBodyConstructor(e) {
 
 
 // Smooth changes of editor panel
-function openElementEditor() {
+function openEditor(query) {
   if (document.querySelector('.editor_block.open')) {
-    smoothOpacity('.editor_block','.editor_element');
+    smoothOpacity('.editor_block', query);
   } else if (document.querySelector('.editor_block_main.open')) {
-    smoothOpacity('.editor_block_main','.editor_element');
+    smoothOpacity('.editor_block_main', query);
+  } else {
+    smoothOpacity('.editor_element', query);
   }
 }
 
@@ -237,6 +320,7 @@ function preventNewLine() {
 function saveChanges(flag=false) {
   if (flag) {
     saveContentBoxSettings();
+    showMainHelpButton()
     smoothOpacity('.editor_block_main', '.editor_block_main', '.warning_div.saved');
     return;
   }
@@ -244,9 +328,11 @@ function saveChanges(flag=false) {
   if (document.querySelector('.editor_element.open')) {
     saveElemSettings(true);
     smoothOpacity('.editor_element', findBlockOrMain(), '.warning_div.saved');
+    showMainHelpButton()
   } else {
     saveElemSettings(true);
     smoothOpacity('.editor_block', '.editor_block_main', '.warning_div.saved');
+    showMainHelpButton()
   }
 }
 
@@ -265,18 +351,29 @@ function saveContentBoxSettings() {
     document.getElementById('settings__name_input').value;
 
   addContentBoxStyle('newcontent');
+  getContent(true);
 }
 
 
 function setMainStylesIfEddited() {
-  document.getElementById('bcs_ta_s').value =
-    document.getElementById('bcs_ta').textContent;
-  document.getElementById('bcs_c_s').value =
-    document.getElementById('bcs_c').textContent;
-  document.getElementById('bcs_pd_s').value =
-    document.getElementById('bcs_pd').textContent;
-  document.getElementById('bcs_ff_s').value =
-    document.getElementById('bcs_ff').textContent;
+  let align = document.getElementById('bcs_ta');
+  let color = document.getElementById('bcs_c');
+  let padin = document.getElementById('bcs_pd');
+  let fontf = document.getElementById('bcs_ff');
+
+  if (align && align.textContent) {
+    document.getElementById('bcs_ta_s').value = align.textContent;
+  }
+  if (color && color.textContent) {
+    document.getElementById('bcs_c_s').value = color.textContent;
+  }
+  if (padin && padin.textContent) {
+    document.getElementById('bcs_pd_s').value = padin.textContent;
+  }
+  if (fontf && fontf.textContent) {
+    document.getElementById('bcs_ff_s').value =
+    document.getElementById('bcs_ff_s').style.fontFamily = fontf.textContent;
+  }
 }
 
 
@@ -362,22 +459,6 @@ function textareaNListener() {
 }
 
 
-// -- on progress -- Search for parent block
-function findBlockOrMain() {
-  return '.editor_block';
-}
-function saveElemSettings(flag=false) {
-  if (flag) {
-    resetElemSettings();
-  } else {
-    document.querySelector('#newarticle legend').textContent =
-      document.getElementById('settings__name_input').value;
-  }
-}
-
-function resetElemSettings() {}
-function createSettingsForMainBlock() {}
-
 function setListenerToFontPicker() {
   let select = document.getElementById('bcs_ff_s');
     select.onchange = function() {
@@ -402,22 +483,95 @@ function checkBackgroundPickerOptions() {
     document.getElementById('picker_m_c').classList.remove('open');
     document.getElementById('picker_m_g1').classList.remove('open');
     document.getElementById('picker_m_g2').classList.remove('open');
+    document.getElementById('picker_m_gs1').classList.remove('open');
+    document.getElementById('picker_m_gs2').classList.remove('open');
     document.getElementById('picker_m_img').classList.remove('open');
+    document.getElementById('picker_m_img1').classList.remove('open');
+    document.getElementById('picker_m_img2').classList.remove('open');
+    document.getElementById('picker_m_img3').classList.remove('open');
   } else if (event.target.value === '2') {
     document.getElementById('picker_m_c').classList.add('open');
     document.getElementById('picker_m_g1').classList.remove('open');
     document.getElementById('picker_m_g2').classList.remove('open');
+    document.getElementById('picker_m_gs1').classList.remove('open');
+    document.getElementById('picker_m_gs2').classList.remove('open');
     document.getElementById('picker_m_img').classList.remove('open');
+    document.getElementById('picker_m_img1').classList.remove('open');
+    document.getElementById('picker_m_img2').classList.remove('open');
+    document.getElementById('picker_m_img3').classList.remove('open');
   } else if (event.target.value === '3') {
     document.getElementById('picker_m_c').classList.remove('open');
     document.getElementById('picker_m_g1').classList.add('open');
     document.getElementById('picker_m_g2').classList.add('open');
+    document.getElementById('picker_m_gs1').classList.add('open');
+    document.getElementById('picker_m_gs2').classList.add('open');
     document.getElementById('picker_m_img').classList.remove('open');
+    document.getElementById('picker_m_img1').classList.remove('open');
+    document.getElementById('picker_m_img2').classList.remove('open');
+    document.getElementById('picker_m_img3').classList.remove('open');
   } else {
     document.getElementById('picker_m_c').classList.remove('open');
     document.getElementById('picker_m_g1').classList.remove('open');
     document.getElementById('picker_m_g2').classList.remove('open');
+    document.getElementById('picker_m_gs1').classList.remove('open');
+    document.getElementById('picker_m_gs2').classList.remove('open');
     document.getElementById('picker_m_img').classList.add('open');
+    document.getElementById('picker_m_img1').classList.add('open');
+    document.getElementById('picker_m_img2').classList.add('open');
+    document.getElementById('picker_m_img3').classList.add('open');
+  }
+}
+
+
+function submitBackgroundChangesMain() {
+  let value = document.getElementById('bcs_bg_s').value;
+  let background = document.getElementById('bcs_bg');
+    if (value === '1') {
+      background.textContent = 'transparent';
+    } else if (value === '2') {
+      background.textContent = document.getElementById('picker_m_c').value;
+    } else if (value === '3') {
+      background.textContent = document.getElementById('picker_m_gs1').value +
+        '(' + document.getElementById('picker_m_gs2').value + ',' +
+        document.getElementById('picker_m_g1').value + ',' +
+        document.getElementById('picker_m_g2').value + ')'
+    } else if (value === '4') {
+      let link = document.getElementById('picker_m_img').value;
+
+      let url = 'url(';
+      if (document.querySelector('#picker_m_img3 input').checked) url = 'fixed url(';
+
+      if (~link.indexOf('[img]')) {
+        background.textContent = url + link.slice(link.indexOf('[img]') +
+          5, link.indexOf('[/img]')) + ') no-repeat'
+      } else if (~link.indexOf('src="')) {
+        link = link.slice(link.indexOf('src="') + 5);
+        background.textContent = url + link.slice(0, link.indexOf('"')) +
+          ') no-repeat'
+      } else {
+        background.textContent = url + link + ') no-repeat'
+      }
+    }
+
+  addContentBoxStyle('newcontent');
+  getContent(true);
+}
+
+
+
+// ON PROGRESS
+
+
+// -- on progress -- Search for parent block
+function findBlockOrMain() {
+  return '.editor_block';
+}
+function saveElemSettings(flag=false) {
+  if (flag) {
+    resetElemSettings();
+  } else {
+    document.querySelector('#newarticle legend').textContent =
+      document.getElementById('settings__name_input').value;
   }
 }
 
@@ -425,3 +579,11 @@ function showHelpEditorMain() {
   document.getElementsByClassName('editor_main_block_disclaimer')[0]
     .classList.toggle('open');
 }
+
+
+function resetElemSettings() {}
+function setListenerToDeclineButton() {}
+function createSettingsForElement(elem) {}
+function createNewBlock() {}
+function setListenerToDeclineButtonBlock() {}
+function setListenerToSaveButtonBlock() {}

@@ -90,15 +90,30 @@ def blog(request, page=1):
 def easteregg(request):
     action = request.GET.get('action', "")
     scheme = request.GET.get('scheme', "")
-    if action == 'cdb':
-        username = request.user.get_username()
-        if username == 'Kato':
+    if request.user.is_superuser:
+        if action == 'cdb':
             clear_backup_db()
-    elif action == 'cbbn':
-        blogs_to_del = query_blogs(request)
-        blogs_to_del[0].delete()
+        elif action == 'cbbn':
+            blogs_to_del = query_blogs(request)
+            blogs_to_del[0].delete()
+        elif action == 'dbbid':
+            try:
+                blog_id = int(request.GET.get("blog_id", ""))
+                blog_to_del = Blog.objects.get(id=blog_id)
+                blog_to_del.delete()
+            except ValueError or Blog.DoesNotExist:
+                return render(request, 'error.html')
+        elif action == 'rabid':
+            try:
+                get_restore_blog(request, True)
+            except ValueError:
+                return render(request, 'error.html')
+    deleted_blogs = Deleted.objects.all()
     # --on progress-- Developer's notes
-    return render(request, 'easter.html', context={"scheme": scheme})
+    return render(request, 'easter.html', context={
+        "scheme": scheme,
+        "deleted_blogs": deleted_blogs
+    })
 
 
 def registration(request):
@@ -178,6 +193,8 @@ def get_article(request, b_id):
     # Authentication & getting error message if occured
     logerror = loghelper(request)
     scheme = request.GET.get('scheme', "")
+    if request.POST.get('scheme_fix', "") != "":
+        scheme = request.POST.get('scheme_fix', "")
 
     try:
         current_blog = Blog.objects.get(id=b_id)
@@ -213,7 +230,8 @@ def get_constructor(request, blog_id=False):
                 current_blog = Blog.objects.get(id=blog_id)
                 blog_add = AddContent.objects.get(article_id=blog_id)
 
-                if current_blog.author != request.user.get_username():
+                if current_blog.author != request.user.get_username() \
+                        and not request.user.is_superuser:
                     return render(request, 'error.html', context={
                         'type': 'permission'
                     })
@@ -260,7 +278,7 @@ def get_delete_blog(request):
         # Article existance error
         return render(request, 'error.html', context={'id': blog_id, 'type': 'blog'})
 
-    if blog_to_del.author == username:
+    if blog_to_del.author == username or request.user.is_superuser:
         # Article deletion & backup
         backup = record_to_db(Deleted(), blog_to_del, False)
         if backup is False:
@@ -280,15 +298,18 @@ def get_delete_blog(request):
         })
 
 
-def get_restore_blog(request):
+def get_restore_blog(request, flag=False):
     """
     Restoration from backup - comments are lost
     :param request: deleted_id
+    :param flag: admin manual restoration flag
     :return: article OR error template
     """
 
     username = request.user.get_username()
-    blog_id = request.GET.get("deleted_id")
+    blog_id = request.GET.get("deleted_id", "")
+    if flag:
+        blog_id = request.GET.get("blog_id", "")
     scheme = request.GET.get('scheme', "")
 
     try:
@@ -297,7 +318,7 @@ def get_restore_blog(request):
         # Invalid blog_id for restoration error
         return render(request, 'error.html', context={'type': 'restore'})
 
-    if blog_restore.author == username:
+    if blog_restore.author == username or request.user.is_superuser:
         # Article restoration & delete from Deleted
         restored = record_to_db(Blog(), blog_restore, False)
         if restored is False:
@@ -444,12 +465,11 @@ def record_to_db(model, from_blog, request):
                 # Edit existing article
                 try:
                     model = Blog.objects.get(id=from_blog)
-                    if model.author != request.POST.get("author") or \
-                       model.author != request.user.get_username():
+                    if (model.author != request.POST.get("author") or
+                       model.author != request.user.get_username()) and \
+                            not request.user.is_superuser:
                         return False
-                    print(timezone.now())
                     model.modified = timezone.now()
-                    print(model.modified)
                 except Blog.DoesNotExist:
                     return False
             model.content = request.POST.get("content")
