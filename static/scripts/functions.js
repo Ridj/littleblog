@@ -13,7 +13,7 @@ function addBlogHeaderListeners() {
 
 
 // Sets custom styles for users containers
-function addContentBoxStyle(content_id) {
+function addContentBoxStyle(content_id, flag=false) {
   let styleContent = document.getElementById(content_id)
     .getElementsByClassName('blog__content_settings')[0];
     if (styleContent) {
@@ -21,6 +21,15 @@ function addContentBoxStyle(content_id) {
       let css = '#' + content_id + '{' + styleContent.textContent + '}';
         if (style.styleSheet) style.styleSheet.cssText = css;
         else style.appendChild( document.createTextNode(css) );
+
+        if (flag) {
+          let head = document.getElementsByTagName('head')[0];
+          for (let i = 0; i < head.children.length; i++) {
+            if (head.children[i].tagName === 'STYLE') {
+              head.removeChild(head.children[i]);
+            }
+          }
+        }
 
       document.getElementsByTagName('head')[0].appendChild(style);
     }
@@ -865,14 +874,17 @@ function setHelpHovers() {
   let view = document.getElementsByClassName('view')[0];
   let drag = document.getElementsByClassName('draggable')[0];
   let menu = document.getElementsByClassName('menu')[0];
+  let editor = document.getElementsByClassName('editor')[0];
 
   setHelpArrowListeners(document.getElementsByClassName('up_ar')[0], view, 'view__fix');
   setHelpArrowListeners(document.getElementsByClassName('left_ar')[0], drag, 'drag_fix');
   setHelpArrowListeners(document.getElementsByClassName('right_ar')[0], menu, 'menu_fix');
+  setHelpArrowListeners(document.getElementsByClassName('down_ar')[0], editor, 'editor_bord');
 
   setHelpListeners(view, document.getElementsByClassName('up_help')[0]);
   setHelpListeners(drag, document.getElementsByClassName('left_help')[0]);
   setHelpListeners(menu, document.getElementsByClassName('right_help')[0]);
+  setHelpListeners(editor, document.getElementsByClassName('down_help')[0]);
 }
 
 
@@ -1177,4 +1189,45 @@ function toggleMenu() {
 // Logout link
 function userLogOut() {
   document.location.href = "/blog/?action=logout" + checkColorScheme();
+}
+
+
+// Web Developer
+function developerDecoding(elem, set) {
+  console.log(set);
+  if (set) {
+    set = set.split(';');
+    for (let i = 0; i < set.length; i++) {
+      if(set[i]) {
+      let property = set[i].split(':')[0].trim();
+      let value = set[i].split(':')[1].trim();
+
+      if (property && property.indexOf('-')) {
+        for (let j = 0; j < property.length; j++) {
+          if (property[j] === '-' && property[j+1]) {
+            property = property.slice(0, j) + property[j+1].toUpperCase() + property.slice(j+2);
+          }
+        }
+      }
+      elem.style[property] = value;
+      }
+
+    }
+  }
+}
+
+
+function unzipWebDeveloper(node) {
+  let children = node.children;
+    for (let i = 0; i < children.length; i++) {
+      let child = children[i].children;
+      if (children[i].dataset.developer) {
+        developerDecoding(children[i], children[i].dataset.developer);
+      }
+      for (let j = 0; j < child.length; j++) {
+        if (child[j].dataset.developer) {
+          developerDecoding(child[j], child[j].dataset.developer);
+        }
+      }
+    }
 }

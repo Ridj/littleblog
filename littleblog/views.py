@@ -167,11 +167,25 @@ def index(request):
     scheme = request.GET.get('scheme', "")
     if scheme == "":
         scheme = 'day'
-    return render(request, 'index.html', context={
-        'blog': blogs[0],       # Last article
-        'preblog': blogs[1],    # Pre-last article
-        'scheme': scheme
-    })
+
+    # В спешке криво поправлен последний косяк :)
+    if len(blogs) > 1:
+        return render(request, 'index.html', context={
+            'blog': blogs[0],       # Last article
+            'preblog': blogs[1],    # Pre-last article
+            'scheme': scheme
+            })
+
+    elif len(blogs) == 1:
+        return render(request, 'index.html', context={
+            'blog': blogs[0],       # Last article
+            'scheme': scheme
+            })
+
+    else:
+        return render(request, 'index.html', context={
+            'scheme': scheme
+            })
 
 
 def resume(request):

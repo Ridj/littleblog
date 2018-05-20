@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
 
-# --on progress--
 class ArticleForm(forms.Form):
     author = forms.CharField(initial='Аноним',
                              min_length=4,
