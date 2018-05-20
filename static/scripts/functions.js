@@ -1194,7 +1194,6 @@ function userLogOut() {
 
 // Web Developer
 function developerDecoding(elem, set) {
-  console.log(set);
   if (set) {
     set = set.split(';');
     for (let i = 0; i < set.length; i++) {

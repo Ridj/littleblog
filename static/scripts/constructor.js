@@ -1005,8 +1005,7 @@ function saveElemBackgroundChangesListener(elem, editor_pre) {
         hexToRgb(document.getElementById('picker_es_g1').value,
         document.getElementById('picker_es_opa').value) + ',' +
         hexToRgb(document.getElementById('picker_es_g2').value,
-        document.getElementById('picker_es_opa').value) + ')'
-      console.log(background)
+        document.getElementById('picker_es_opa').value) + ')';
     } else if (value === '4') {
       let link = document.getElementById('picker_es_img').value;
 
